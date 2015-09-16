@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Formation Cassandra - Xebia</title>
+
+		<meta name="description" content="Formation Cassandra by Xebia">
+		<meta name="author" content="Matthieu Nantern">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+			<div class='footer'>
+    			<img src="media/byXebia.png"/>
+  			</div>
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Formation Cassandra</h1>
+					<h3>Xebia</h3>
+					<p class="center">
+						<small>Created by <a href="http://nantern.fr">Matthieu Nantern</a> / <a href="http://twitter.com/mnantern">@mnantern</a></small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Le programme !</h2>
+					<ol>
+						<li>Tour de table</li>
+						<li>Introduction</li>
+						<li>Architecture de Cassandra</li>
+						<li>Installation et configuration</li>
+						<li>Modèle de données</li>
+						<li>Le driver Java</li>
+						<li>Administration Cassandra</li>
+					</ol>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h2>Tour de table</h2>
+					<ul>
+						<li>Qui suis-je ?</li>
+						<li>Trois attentes sur la formation</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h1>Introduction</h1>
+					</section>
+
+					<section>
+						<h3>Cassandra et les bases NoSQL</h3>
+						<p class="fragment">NoSQL ?</p>
+						<blockquote cite="https://www.mongodb.com/nosql-explained" class="fragment">
+							&ldquo;NoSQL (Not only SQL en anglais) désigne une catégorie de systèmes de gestion de base de données qui n'est plus fondée sur l'architecture classique des bases relationnelles. Il renonce aux fonctionnalités classiques des SGBD relationnels au profit de la simplicité. Les performances restent bonnes en multipliant simplement le nombre de serveurs, solution raisonnable avec la baisse des coûts.&rdquo;
+						</blockquote>
+					</section>
+
+					<section>
+						<h3>Les bases NoSQL</h3>
+						<p class="fragment roll-in">
+		                    <img src="media/cassandra.jpg"/>
+		                    <img src="media/mongo.png"/>
+		                    <img src="media/hbase.png"/>
+		                    <img src="media/redis.jpg"/>
+		                    <img src="media/couchbase.jpg"/>
+		                    <img src="media/neo4j.png"/>
+		                    <strong>...</strong>
+		                </p>
+					</section>
+
+					<section>
+						<h3>Les bases NoSQL</h3>
+						<p>Les bases NoSQL se classent en quatre catégories:</p>
+						<ul>
+							<li><span class='highlight'>Colonnes:</span> Cassandra, HBase</li>
+							<li><span class='highlight'>Documents:</span> MongoDB, Couchbase, ElasticSearch</li>
+							<li><span class='highlight'>Clés/valeurs:</span> Redis, Riak</li>
+							<li><span class='highlight'>Graph:</span> Neo4j</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Un peu de théorie: le théorème de CAP</h3>
+						<p>Le théorème CAP également connu sous le nom de théorème de Brewer montre qu’il est impossible pour un système distribué de satisfaire de manière simultanée les trois contraintes suivantes :</p>
+						<ul>
+							<li><span class='highlight'>Cohérence (“Consistency”) :</span> tous les noeuds du système voient la même donnée au même moment;</li>
+							<li><span class='highlight'>Disponibilité (“Availability”) :</span> chaque requête recevra une réponse (que cela soit un succès ou un échec);</li>
+							<li><span class='highlight'>Résistance à la partition (“Partition tolerance”) :</span>  le système continue de fonctionner malgré des défaillances pouvant aller jusqu’à la séparation du cluster en sous-système.</li>
+						</ul>
+					</section>
+
+					<section>
+						<img src="media/visual_cap.png"/>
+					</section>
+
+					<section>
+						<h3>Cassandra</h3>
+						<ul>
+							<li><b>Technologies de base:</b>
+								<ul>
+									<li><span class='highlight'>Google BigTable :</span> modèle de stockage</li>
+									<li><span class='highlight'>Amazon Dynamo :</span> modèle de réplication</li>
+								</ul>
+							</li>
+							<li>Historique:
+								<ul>
+									<li><span class='highlight'>2008 :</span> libération par Facebook</li>
+									<li><span class='highlight'>2010 :</span> Top Level Project Apache</li>
+									<li><span class='highlight'>Octobre 2011 :</span> version 1.0</li>
+									<li><span class='highlight'>Septembre 2013 :</span> version 2.0</li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Quand utiliser Cassandra ?</h3>
+						<ul>
+							<li>Pas de SPOF (Single point of failure)</li>
+							<li>Réplication native entre serveurs et datacenter</li>
+							<li>Scalabilité linéaire</li>
+							<li>Beaucoup d'écriture et de lecture</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Quand ne pas utiliser Cassandra ?</h3>
+						<ul>
+							<li>Besoin de transaction avec rollback</li>
+							<li>??</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Les cas d'utilisation classiques de Cassandra</h3>
+						<ul>
+							<li><b>Time series / IOT</b></li>
+							<li><b>Messaging</b></li>
+							<li><b>Recommandation</b></li>
+							<li><b>Catalogue produit / Playlists</b></li>
+						</ul>
+						<p class="center"><a href="http://www.planetcassandra.org/apache-cassandra-use-cases/">liste de cas d'utilisation C*</a></p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Architecture de Cassandra</h1>
+					</section>
+
+					<section>
+						<h3>Le cluster</h3>
+						<img src="media/Cassandra_architecture.png"/>
+					</section>				
+
+					<section>
+						<h3>Le coordinator</h3>
+						<img class="stretch" src="media/architecture_coordinator.png"/>
+					</section>
+
+					<section>
+						<h3>Le partitionnement</h3>
+						<img class="stretch" src="media/architecture_partinionnement.png"/>
+					</section>
+
+					<section>
+						<h3>La réplication (1/2)</h3>
+						<p>Deux éléments influent sur la réplication:</p>
+						<ol>
+							<li><span class='highlight'>Le facteur de réplication</span>: indique le nombre de fois qu'une donnée doit être répliquée sur le cluster</li>
+							<li><span class='highlight'>La stratégie de réplication</span>: indique à quelle machine fournir la donnée</li>
+						</ol>
+						<pre><code data-trim contenteditable>
+	CREATE KEYSPACE Demo 
+	WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'dc-east' : 2, 'dc-west' : 3 };
+							</code></pre>
+					</section>
+
+					<section>
+						<h3>La réplication (2/2)</h3>
+						<img class="stretch" src="media/architecture_replication.png"/>
+					</section>
+
+					<section>
+						<h3>La consistance</h3>
+						<p>La consistance d'une requête définit le nombre de noeuds devant répondre à une requête avant que celle-ci ne soit considérée comme terminée par le cluster Cassandra.</p>
+						<p>Dans le cadre d'<span class='highlight'>une lecture</span> cela définit le nombre de noeud devant envoyer la copie la plus récente de la donnée.</p>
+						<p>Dans le cadre d'<span class='highlight'>une écriture</span> cela définit le nombre  de noeud devant confirmer avoir écrit la donnée.</p>
+						<p>La consistance est choisie par requête dans Cassandra.</p>
+					</section>
+
+					<section>
+						<h3>Les différents niveaux de consistence</h3>
+						<table>
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><span class='highlight'>ONE</span></td>
+									<td>Attend la réponse d'une noeud avant de répondre au client.</td>
+								<tr>
+								<tr>
+									<td><span class='highlight'>QUORUM</span></td>
+									<td>Attend la réponse de RF/2+1 avant de répondre au client.</td>
+								<tr>
+								<tr>
+									<td><span class='highlight'>ALL</span></td>
+									<td>Attend la réponse de tous les noeuds avant de répondre au client.</td>
+								<tr>
+							</tbody>
+						</table>
+					</section>
+
+					<section>
+						<h3>La consistance en action</h3>
+						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>ONE</span>, Read <span class='highlight'>ONE</span></p>
+						<img class="stretch" src="media/architecture_consistence1.png"/>
+					</section>
+
+					<section>
+						<h3>La consistance en action</h3>
+						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>ONE</span>, Read <span class='highlight'>QUORUM</span></p>
+						<img class="stretch" src="media/architecture_consistence2.png"/>
+					</section>
+
+					<section>
+						<h3>La consistance en action</h3>
+						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>ONE</span>, Read <span class='highlight'>ALL</span></p>
+						<img class="stretch" src="media/architecture_consistence3.png"/>
+					</section>
+
+					<section>
+						<h3>La consistance en action</h3>
+						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>QUORUM</span>, Read <span class='highlight'>QUORUM</span></p>
+						<img class="stretch" src="media/architecture_consistence4.png"/>
+					</section>
+
+					<section>
+						<h3>Les usages des niveaux de consistence (1/2)</h3>
+						<table>
+							<thead>
+								<tr>
+									<th>Nom</th>
+									<th>Usage</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><span class='highlight'>ONE</span></td>
+									<td>Rapide. Très bonne disponibilité. Ne lit pas forcément la toute dernière valeur.</td>
+								<tr>
+								<tr>
+									<td><span class='highlight'>QUORUM</span></td>
+									<td>Bon compromis entre la consistence et la rapidité.</td>
+								<tr>
+								<tr>
+									<td><span class='highlight'>ALL</span></td>
+									<td>Plus haut niveau de consistence. Très faible disponibilité.</td>
+								<tr>
+							</tbody>
+						</table>
+					</section>
+
+					<section>
+						<h3>Les usages des niveaux de consistence (2/2)</h3>
+						<p>Les deux niveaux les plus couramment utilisés sont:</p>
+						<ul>
+							<li><span class='highlight'>ONE read + ONE write:</span> rapide et fonctionne même avec RF - 1 noeuds indisponibles</li>
+							<li><span class='highlight'>QUORUM read + QUORUM write:</span> consistent. On lit toujours la dernière valeur insérée.</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Cassandra Write Path</h3>
+						<img class="stretch" src="media/write-path.png"/>
+					</section>
+
+					<section>
+						<h3>Cassandra Read Path</h3>
+						<img class="stretch" src="media/read-path.png"/>
+					</section>
+
+					<section>
+						<h3>La scalabilité</h3>
+						<img class="stretch" src="media/scale.png"/>
+					</section>
+
+				</section>
+
+				<section>
+					<section>
+						<h1>Installation et configuration</h1>
+					</section>
+
+					<section>
+						<h3>Installation de C*</h3>
+						<h6>Prérequis</h6>
+						<ul>
+							<li>Oracle JDK 1.7 64 bits</li>
+							<li>Configurer JAVA_HOME</li>
+							<li>Sélectionner sa distribution C*:
+								<ul>
+									<li><a href="http://cassandra.apache.org/download/">Apache Cassandra</a></li>
+									<li><a href="http://www.planetcassandra.org/cassandra/">Datastax Community Edition</a></li>
+									<li><a href="https://academy.datastax.com/downloads?destination=downloads&dxt=DX">Datastax Enterprise</a></li>
+								</ul>
+							</li>
+						</ul>
+					</section>
+
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Installation de C*</h3>
+						<h6>Utilisation du paquet DEB sur notre VM</h6>
+						<pre><code data-trim contenteditable>
+						sudo dpkg -i TODO.deb
+						</code></pre>
+					</section>
+
+					<section>
+						<h3>Installation de C*</h3>
+						<h6>Fichiers de configuration</h6>
+						<ul>
+							<li><span class='highlight'>cassandra.yaml:</span> fichier principal de configuration</li>
+							<li><span class='highlight'>cassandra-env.sh:</span> configuration de l'environnement Java (heap size,...)</li>
+							<li><span class='highlight'>logback.xml:</span> configuration des logs</li>
+						</ul>
+						<h6>Le fichier cassandra.yaml, principales propriétés</h6>
+						<ul>
+							<li><span class='highlight'>cluster_name:</span> toutes les machines d'un cluster doivent avoir le même nom</li>
+							<li><span class='highlight'>listen_address:</span> le port sur lequel C* écoute les autres noeuds</li>
+						</ul>
+					</section>
+
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Installation de C*</h3>
+						<h6>On démarre !</h6>
+						<ol>
+							<li>Démarrer le service Cassandra
+							<pre><code data-trim contenteditable>
+								sudo service cassandra start
+							</code></pre>
+							</li>
+							<li>Visualiser les logs de C*
+							<pre><code data-trim contenteditable>
+								ls /var/log/cassandra/
+							</code></pre>
+							</li>
+							<li>Arrêter le service Cassandra
+							<pre><code data-trim contenteditable>
+								sudo service cassandra stop
+							</code></pre>
+							</li>
+						</ol>
+					</section>
+
+					<section>
+						<h3>Les outils Cassandra</h3>
+						<h6>nodetool</h6>
+						<p>Nodetool est le couteau suisse de Cassandra. Il permet d'obtenir des informations et de gérer un cluster de machines. Les commandes les plus couramment utilisées sont:</p>
+						<ul>
+							<li><span class='highlight'>status:</span> fournit des informations sur le cluster (état, charge, ID)</li>
+							<li><span class='highlight'>info:</span>  fournit des informations sur la machine locale (mémoire, espace disque,...)</li>
+							<li><span class='highlight'>ring:</span> affiche un résumé pour chaque noeud dans le cluster. Permet de repérer les machines déséquilibrées. Privilégier plutôt status et info</li>
+						</ul>
+					</section>
+
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Nodetool</h3>
+						<ol>
+							<li>Explorer la liste des commandes de nodetool
+							<pre><code data-trim contenteditable>
+								nodetool help
+							</code></pre>
+							</li>
+							<li>Obtenir de l'aide sur une commande
+							<pre><code data-trim contenteditable>
+								nodetool help &lt;command&gt;
+							</code></pre>
+							</li>
+							<li>Tester les commandes status,info et ring</li>
+						</ol>
+					</section>
+
+					<section>
+						<h3>Les outils Cassandra</h3>
+						<h6>cqlsh</h6>
+						<p>CQLSH est un shell interactif permettant de tester des commandes dans le langage CQL (Cassandra Query Language). Il offre également d'autres commandes uniquement disponibles dans le shell:</p>
+						<ul>
+							<li><span class='highlight'>COPY:</span> import ou export les données au format CSV</li>
+							<li><span class='highlight'>DESCRIBE:</span> fournit des informations sur le cluster, les keyspaces ou les tables</li>
+							<li><span class='highlight'>TRACING:</span> active ou désactive le tracing des requêtes</li>
+							<li><span class='highlight'>SOURCE:</span> exécute un fichier contenant des requêtes CQL</li>
+							<li><a href="http://docs.datastax.com/en/cql/3.3/cql/cql_reference/cqlshCommandsTOC.html">Et d'autres...</a></li>
+						</ul>
+					</section>
+
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>On créé notre premier keyspace !</h3>
+						<ol>
+							<li>Affichons la liste des keyspaces (Tab pour l'auto-complétion)
+							<pre><code data-trim contenteditable>
+								cqlsh> DESCRIBE KEYSPACES;
+							</code></pre>
+							</li>
+							<li>Création d'un keyspace:
+							<pre><code data-trim contenteditable>
+	CREATE KEYSPACE XCass 
+	WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+							</code></pre>
+							</li>
+							<li>Afficher à nouveau la liste des keyspaces et le détail pour notre keyspace XCass</li>
+						</ol>
+					</section>
+
+					<section>
+						<h3>Les outils Cassandra</h3>
+						<h6>DevCenter</h6>
+						<p>DevCenter est un IDE (basé sur Eclipse) permettant de visualiser les tables et d'exécuter des commandes CQL avec auto-complétion, sauvegarder des requêtes et maintenir plusieurs connections simultanées</p>
+					</section>
+
+					<section>
+						<img class="stretch" src="media/devcenter.jpg"/>
+					</section>
+				</section>
+
+
+				<section>
+					<section>
+						<h1>Modèle de données</h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Créer une application Java scalable</h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Préparer Cassandra pour la production</h1>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Merci !</h1>
+					</section>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				slideNumber: 'c / t',
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
