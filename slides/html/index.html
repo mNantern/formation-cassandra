@@ -103,8 +103,8 @@
 						<p>Les bases NoSQL se classent en quatre catégories:</p>
 						<ul>
 							<li><span class='highlight'>Colonnes:</span> Cassandra, HBase</li>
-							<li><span class='highlight'>Documents:</span> MongoDB, Couchbase, ElasticSearch</li>
-							<li><span class='highlight'>Clés/valeurs:</span> Redis, Riak</li>
+							<li><span class='highlight'>Documents:</span> MongoDB, ElasticSearch</li>
+							<li><span class='highlight'>Clés/valeurs:</span> Redis, Riak, Couchbase</li>
 							<li><span class='highlight'>Graph:</span> Neo4j</li>
 						</ul>
 					</section>
@@ -138,6 +138,7 @@
 									<li><span class='highlight'>2010 :</span> Top Level Project Apache</li>
 									<li><span class='highlight'>Octobre 2011 :</span> version 1.0</li>
 									<li><span class='highlight'>Septembre 2013 :</span> version 2.0</li>
+									<li><span class='highlight'>Décembre 2015 :</span> version 3.x</li>
 								</ul>
 							</li>
 						</ul>
@@ -147,7 +148,7 @@
 						<h3>Quand utiliser Cassandra ?</h3>
 						<ul>
 							<li>Pas de SPOF (Single point of failure)</li>
-							<li>Réplication native entre serveurs et datacenter</li>
+							<li>Réplication native entre serveurs et datacenters</li>
 							<li>Scalabilité linéaire</li>
 							<li>Beaucoup d'écriture et de lecture</li>
 						</ul>
@@ -181,7 +182,7 @@
 					<section>
 						<h3>Le cluster</h3>
 						<img src="media/Cassandra_architecture.png"/>
-					</section>				
+					</section>
 
 					<section>
 						<h3>Le coordinator</h3>
@@ -198,10 +199,10 @@
 						<p>Deux éléments influent sur la réplication:</p>
 						<ol>
 							<li><span class='highlight'>Le facteur de réplication</span>: indique le nombre de fois qu'une donnée doit être répliquée sur le cluster</li>
-							<li><span class='highlight'>La stratégie de réplication</span>: indique à quelle machine fournir la donnée</li>
+							<li><span class='highlight'>La stratégie de réplication</span>: indique quelle machine doit stocker la donnée</li>
 						</ol>
 						<pre><code data-trim contenteditable>
-	CREATE KEYSPACE Demo 
+	CREATE KEYSPACE Demo
 	WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'dc-east' : 2, 'dc-west' : 3 };
 							</code></pre>
 					</section>
@@ -212,11 +213,11 @@
 					</section>
 
 					<section>
-						<h3>La consistance</h3>
-						<p>La consistance d'une requête définit le nombre de noeuds devant répondre à une requête avant que celle-ci ne soit considérée comme terminée par le cluster Cassandra.</p>
+						<h3>La cohérence</h3>
+						<p>La cohérence d'une requête définit le nombre de noeuds devant répondre à une requête avant que celle-ci ne soit considérée comme terminée par le cluster Cassandra.</p>
 						<p>Dans le cadre d'<span class='highlight'>une lecture</span> cela définit le nombre de noeud devant envoyer la copie la plus récente de la donnée.</p>
 						<p>Dans le cadre d'<span class='highlight'>une écriture</span> cela définit le nombre  de noeud devant confirmer avoir écrit la donnée.</p>
-						<p>La consistance est choisie par requête dans Cassandra.</p>
+						<p>La cohérence est choisie par requête dans Cassandra.</p>
 					</section>
 
 					<section>
@@ -246,25 +247,25 @@
 					</section>
 
 					<section>
-						<h3>La consistance en action</h3>
+						<h3>La cohérence en action</h3>
 						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>ONE</span>, Read <span class='highlight'>ONE</span></p>
 						<img class="stretch" src="media/architecture_consistence1.png"/>
 					</section>
 
 					<section>
-						<h3>La consistance en action</h3>
+						<h3>La cohérence en action</h3>
 						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>ONE</span>, Read <span class='highlight'>QUORUM</span></p>
 						<img class="stretch" src="media/architecture_consistence2.png"/>
 					</section>
 
 					<section>
-						<h3>La consistance en action</h3>
+						<h3>La cohérence en action</h3>
 						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>ONE</span>, Read <span class='highlight'>ALL</span></p>
 						<img class="stretch" src="media/architecture_consistence3.png"/>
 					</section>
 
 					<section>
-						<h3>La consistance en action</h3>
+						<h3>La cohérence en action</h3>
 						<p>RF = <span class='highlight'>3</span>, Write <span class='highlight'>QUORUM</span>, Read <span class='highlight'>QUORUM</span></p>
 						<img class="stretch" src="media/architecture_consistence4.png"/>
 					</section>
@@ -438,7 +439,7 @@
 							</li>
 							<li>Création d'un keyspace:
 							<pre><code data-trim contenteditable>
-	CREATE KEYSPACE XCass 
+	CREATE KEYSPACE XCass
 	WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
 							</code></pre>
 							</li>
@@ -461,6 +462,73 @@
 				<section>
 					<section>
 						<h1>Modèle de données</h1>
+					</section>
+					<section>
+						<h3>Principes de modélisations des données</h3>
+						<p>Construire un schéma de base relationnelle passe bien souvent par la description des types d'objets, des attributs et des liens entre les tables. Les requêtes arrivent bien souvent ensuite.</p>
+						<p>Pour Cassandra il est primordial de <span class='highlight'>commencer par les requêtes</span>. Les tables sont ensuites construites pour supporter ces requêtes. Cela permet d'obtenir un modèle répondant rapidement aux requêtes et scalant correctement.</p>
+					</section>
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>L'application XCass</h3>
+					</section>
+					<section>
+						<h3>Clé primaire</h3>
+						<p>Clé de partitionement, colonnes de clustering, clé composée,...</p>
+					</section>
+					<section>
+						<h3>Clé de partitionement</h3>
+						<p>Toutes les requêtes doivent spécifier la clé de partitionement. Pas de range query (=> full cluster scan)</p>
+					</section>
+					<section>
+						<h3>Stockage physique des données</h3>
+						<p>partitions, partition key,clustering columns,cellules,...</p>
+					</section>
+					<section>
+						<h3>Les types de données</h3>
+						<p>UUID, Time UUID, ...</p>
+					</section>
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Première table et premières requêtes</h3>
+						<p>Créer une table permettant d'héberger les données d'un objet connecté</p>
+					</section>
+					<section>
+						<h3>Upsert</h3>
+						<p>LWW: last write wins</p>
+					</section>
+					<section>
+						<h3>Clustering columns</h3>
+						<p>Possibiliter d'ordonner les colonnes de clustering</p>
+						<p>Possibiliter de faire des range requests</p>
+					</section>
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Reprendre l'exemple précédent en ordonnant les données de la plus récente à la plus ancienne</h3>
+						<p>2 possibilités: directement dans la requête ou lors de la construction de la table</p>
+					</section>
+					<section>
+						<h3>Index secondaire</h3>
+						<p>Quand ne pas les utiliser, comment faire autrement ?</p>
+					</section>
+					<section>
+						<h3>Les collections</h3>
+					</section>
+					<section>
+						<h3>UDT: User Defined Type</h3>
+					</section>
+					<section>
+						<h3>Les compteurs</h3>
+					</section>
+					<section>
+						<h3>La dénormalisation</h3>
+					</section>
+					<section>
+						<h3>Comment modéliser une relation 1-n ?</h3>
+					</section>
+					<section>
+						<h3>LWT</h3>
+					</section>
+					<section>
+						<h3>Et bien plus !</h3>
+						<p>UDF, ...</p>
 					</section>
 				</section>
 
