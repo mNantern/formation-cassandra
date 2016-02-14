@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -19,7 +20,7 @@ public class InputData {
   private Type type;
 
   @NotEmpty
-  private String eventTime;
+  private Instant eventTime;
 
   @NotEmpty
   private String value;
@@ -40,11 +41,11 @@ public class InputData {
     this.type = type;
   }
 
-  public String getEventTime() {
+  public Instant getEventTime() {
     return eventTime;
   }
 
-  public void setEventTime(String eventTime) {
+  public void setEventTime(Instant eventTime) {
     this.eventTime = eventTime;
   }
 
