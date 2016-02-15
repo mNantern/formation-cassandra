@@ -204,7 +204,11 @@
 						</ol>
 						<pre><code data-trim contenteditable>
 	CREATE KEYSPACE Demo
-	WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'dc-east' : 2, 'dc-west' : 3 };
+WITH REPLICATION = {
+	'class' : 'NetworkTopologyStrategy',
+	'dc-east' : 2,
+	'dc-west' : 3
+};
 							</code></pre>
 					</section>
 
@@ -222,7 +226,7 @@
 					</section>
 
 					<section>
-						<h3>Les différents niveaux de consistence</h3>
+						<h3>Les différents niveaux de cohérence</h3>
 						<table>
 							<thead>
 								<tr>
@@ -272,7 +276,7 @@
 					</section>
 
 					<section>
-						<h3>Les usages des niveaux de consistence (1/2)</h3>
+						<h3>Les usages des niveaux de cohérence (1/2)</h3>
 						<table>
 							<thead>
 								<tr>
@@ -287,18 +291,18 @@
 								<tr>
 								<tr>
 									<td><span class='highlight'>QUORUM</span></td>
-									<td>Bon compromis entre la consistence et la rapidité.</td>
+									<td>Bon compromis entre la cohérence et la rapidité.</td>
 								<tr>
 								<tr>
 									<td><span class='highlight'>ALL</span></td>
-									<td>Plus haut niveau de consistence. Très faible disponibilité.</td>
+									<td>Plus haut niveau de cohérence. Très faible disponibilité.</td>
 								<tr>
 							</tbody>
 						</table>
 					</section>
 
 					<section>
-						<h3>Les usages des niveaux de consistence (2/2)</h3>
+						<h3>Les usages des niveaux de cohérence (2/2)</h3>
 						<p>Les deux niveaux les plus couramment utilisés sont:</p>
 						<ul>
 							<li><span class='highlight'>ONE read + ONE write:</span> rapide et fonctionne même avec RF - 1 noeuds indisponibles</li>
@@ -533,7 +537,7 @@ CREATE TABLE users (
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
 						<h3>Première table et premières requêtes</h3>
 						<p>
-							Réaliser l'exercice <a href="https://github.com/mNantern/formation-cassandra/blob/master/exercices/02_premieres_requetes.md">exercices/02_premieres_requetes.md</a> 
+							Réaliser l'exercice <a href="https://github.com/mNantern/formation-cassandra/blob/master/exercices/02_premieres_requetes.md">exercices/02_premieres_requetes.md</a>
 						</p>
 					</section>
 

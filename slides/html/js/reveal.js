@@ -558,8 +558,6 @@
 				slide.style.top = top + 'px';
 				slide.style.width = slideWidth + 'px';
 
-				// TODO Backgrounds need to be multiplied when the slide
-				// stretches over multiple pages
 				var background = slide.querySelector( '.slide-background' );
 				if( background ) {
 					background.style.width = pageWidth + 'px';
@@ -1505,7 +1503,7 @@
 
 			var size = getComputedSlideSize();
 
-			var slidePadding = 20; // TODO Dig this out of DOM
+			var slidePadding = 20;
 
 			// Layout the contents of the slides
 			layoutSlideContents( config.width, config.height, slidePadding );
@@ -4115,8 +4113,6 @@
 	 */
 	function onOverviewSlideClicked( event ) {
 
-		// TODO There's a bug here where the event listeners are not
-		// removed after deactivating the overview.
 		if( eventsAreBound && isOverview() ) {
 			event.preventDefault();
 

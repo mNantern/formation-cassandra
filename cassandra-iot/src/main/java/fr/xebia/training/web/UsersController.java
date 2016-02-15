@@ -13,7 +13,7 @@ public class UsersController {
 
   @RequestMapping(value="/{user}", method= RequestMethod.GET)
   public User getUser(@PathVariable Long user) {
-    // TODO
+    // TODO implement getUser
     return null;
   }
 

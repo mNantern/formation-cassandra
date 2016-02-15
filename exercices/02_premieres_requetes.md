@@ -36,6 +36,7 @@ Nous allons maintenant charger quelques utilisateurs dans notre nouvelle table:
 3. Vérifier que le bon nombre de données ont été inséré
 
 TODO: Ajouter le fichier CSV à la VM
+TODO: Tester le fichier CSV
 
 ## Premières requêtes
 

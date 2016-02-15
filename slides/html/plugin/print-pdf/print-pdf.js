@@ -19,7 +19,6 @@ page.viewportSize = {
 	height: slideHeight
 };
 
-// TODO
 // Something is wrong with these config values. An input
 // paper width of 1920px actually results in a 756px wide
 // PDF.
@@ -45,4 +44,3 @@ page.open( inputFile, function( status ) {
 		phantom.exit();
 	}, 1000 );
 } );
-
