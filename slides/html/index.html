@@ -332,7 +332,7 @@
 						<h3>Installation de C*</h3>
 						<h6>Prérequis</h6>
 						<ul>
-							<li>Oracle JDK 1.7 64 bits</li>
+							<li>Oracle JDK 1.8 64 bits</li>
 							<li>Configurer JAVA_HOME</li>
 							<li>Sélectionner sa distribution C*:
 								<ul>
@@ -346,9 +346,9 @@
 
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
 						<h3>Installation de C*</h3>
-						<h6>Utilisation du paquet DEB sur notre VM</h6>
+						<h6>Clonner le dépôt présent à l'adresse suivante et réaliser ce qui est indiqué dans le fichier <span class='highlight'>exercices/01_installation.md</span></h6>
 						<pre><code data-trim contenteditable>
-						sudo dpkg -i TODO.deb
+						git clone https://github.com/mNantern/formation-cassandra.git
 						</code></pre>
 					</section>
 
@@ -371,9 +371,9 @@
 						<h3>Installation de C*</h3>
 						<h6>On démarre !</h6>
 						<ol>
-							<li>Démarrer le service Cassandra
+							<li>Vérifier le status du service Cassandra
 							<pre><code data-trim contenteditable>
-								sudo service cassandra start
+								sudo service cassandra status
 							</code></pre>
 							</li>
 							<li>Visualiser les logs de C*
@@ -384,6 +384,11 @@
 							<li>Arrêter le service Cassandra
 							<pre><code data-trim contenteditable>
 								sudo service cassandra stop
+							</code></pre>
+							</li>
+							<li>Démarrer le service Cassandra
+							<pre><code data-trim contenteditable>
+								sudo service cassandra start
 							</code></pre>
 							</li>
 						</ol>
@@ -440,11 +445,14 @@
 							</li>
 							<li>Création d'un keyspace:
 							<pre><code data-trim contenteditable>
-	CREATE KEYSPACE XCass
-	WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+	CREATE KEYSPACE cassandra-iot
+WITH REPLICATION = {
+	'class' : 'SimpleStrategy',
+	'replication_factor' : 1
+};
 							</code></pre>
 							</li>
-							<li>Afficher à nouveau la liste des keyspaces et le détail pour notre keyspace XCass</li>
+							<li>Afficher à nouveau la liste des keyspaces et le détail pour notre keyspace cassandra-iot</li>
 						</ol>
 					</section>
 
@@ -466,12 +474,69 @@
 					</section>
 					<section>
 						<h3>Principes de modélisations des données</h3>
-						<p>Construire un schéma de base relationnelle passe bien souvent par la description des types d'objets, des attributs et des liens entre les tables. Les requêtes arrivent bien souvent ensuite.</p>
+						<p>Construire un schéma de base relationnelle passe bien souvent par la description des types d'objets, des attributs et des liens entre les tables. Les requêtes arrivent ensuite.</p>
 						<p>Pour Cassandra il est primordial de <span class='highlight'>commencer par les requêtes</span>. Les tables sont ensuites construites pour supporter ces requêtes. Cela permet d'obtenir un modèle répondant rapidement aux requêtes et scalant correctement.</p>
 					</section>
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-						<h3>L'application XCass</h3>
+						<h3>L'application Cassandra-iot</h3>
+						<p>Nous allons développer la partie back d'une application destinée à gérer des objets connectés.</p>
+						<p>Cette application devra être capable de gérer les données provenant de millions d'objets de manière performante et sans interruption de service.</p>
+						<p>Notre application devra être capable de déclarer des familles d'objets connectés, de créer un objet connecté, d'envoyer des données sur cet objet et de gérer des comptes utilisateurs.</p>
 					</section>
+					<section>
+						<h3>Keyspaces</h3>
+						<ul>
+							<li>Niveau le plus élevé</li>
+							<li>Contient des tables</li>
+							<li>
+								Le paramètre de réplication est obligatoire:
+								<pre><code data-trim contenteditable>
+		CREATE KEYSPACE cassandra-iot
+WITH REPLICATION = {
+	'class' : 'SimpleStrategy',
+	'replication_factor' : 1
+};
+								</code></pre>
+							</li>
+							<li>
+								Utiliser le mot clé <span class='highlight'>USE</span> pour changer de keyspace:
+								<pre><code data-trim contenteditable>
+		USE cassandra-iot;
+								</code></pre>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Les tables</h3>
+						<p>Les keyspaces contiennent des tables.</p>
+						<p>Les tables contiennent les données.</p>
+						<pre><code data-trim contenteditable>
+CREATE TABLE users (
+	user_id UUID PRIMARY KEY,
+	first_name TEXT,
+	last_name TEXT,
+	email TEXT
+);
+						</code></pre>
+					</section>
+					<section>
+						<h3>Les types de données, épisode 1</h3>
+						<ul>
+							<li><span class='highlight'>text:</span> une chaine de caractères encodée en UTF8, équivalent à varchar</li>
+							<li><span class='highlight'>uuid:</span> un identifiant unique (UUID de type 4)</li>
+							<li><span class='highlight'>int:</span> un entier sur 32 bits signé</li>
+							<li><span class='highlight'>timeuuid:</span> un identifiant unique conteant un timestamp (UUID de type 1).</li>
+							<li><span class='highlight'>timestamp:</span> millisecondes depuis Epoch</li>
+						</ul>
+					</section>
+
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Première table et premières requêtes</h3>
+						<p>
+							Réaliser l'exercice <a href="https://github.com/mNantern/formation-cassandra/blob/master/exercices/02_premieres_requetes.md">exercices/02_premieres_requetes.md</a> 
+						</p>
+					</section>
+
 					<section>
 						<h3>Clé primaire</h3>
 						<p>Clé de partitionement, colonnes de clustering, clé composée,...</p>
