@@ -542,6 +542,103 @@ CREATE TABLE users (
 					</section>
 
 					<section>
+						<h3>Importance de la clé de partitionnement</h3>
+						<p>Dans une base de données relationnelle son absence implique un "full table scan".</p>
+						<p>Avec C* cela implique un <span class='highlight'>"full cluster scan"</span>.</p>
+						<img src="media/kllm.gif"/>
+						<h6>Comment fait-on alors ?</h6>
+					</section>
+
+					<section>
+						<h3>Index secondaire</h3>
+						<p>Il existe dans Cassandra un mécanisme d'index secondaires permettant de réaliser ensuite des requêtes sur cet index sans avoir besoin de passer la clé de partitionnement.</p>
+						<p>
+							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
+						</p>
+					</section>
+
+					<section>
+						<h3>Index secondaire</h3>
+						<h6>Quand ne faut-il pas les utiliser ?</h6>
+						<ul>
+							<li>Sur les colonnes avec une grande cardinalité (un id ou un email par exemple)</li>
+							<li>Sur les colonnes avec une très faible cardinalité (un boolean par exemple)</li>
+							<li>Sur les tables contenant une grande quantité de données: les index secondaires sont locaux à chaque machine du cluster</li>
+							<li>Sur les colonnes où les données sont régulièrement supprimées</li>
+						</ul>
+					</section>
+
+					<section>
+						<h3>Index secondaire</h3>
+						<h6>Quand faut-il les utiliser ?</h6>
+						<ul>
+							<li>Sur des colonnes contenant peu de données et une cardinalité moyenne</li>
+							<li>Si la requête est restreinte par la clé de partitionnement</li>
+						</ul>
+						<p>
+							Le plus simple est d'oublier les index secondaires.
+						</p>
+					</section>
+
+					<section>
+						<h3>Comment faire alors ?</h3>
+						<p>
+							La bonne solution dans notre cas est d'utiliser l'email en tant que clé primaire d'une autre table. La clé primaire est globale au cluster au contraire d'un index secondaire.
+						</p>
+						<p>
+							Dupliquer les données dans C* ne pose aucun problème, la base est conçue pour cela. Ecrire des données est efficace, utiliser un index secondaire ne l'est pas.
+						</p>
+						<p>
+							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
+						</p>
+					</section>
+
+					<section>
+						<h3>Remarques</h3>
+						<p>
+							La cohérence entre nos tables 'users' et 'users_by_email' doit être <span class='highlight'>assurée applicativement</span> lors des insertions/mises à jour et des suppressions. Il est important de ne <span class='highlight'>dénormaliser que les données qui changent peu</span>.
+						</p>
+						<p>
+							Si la duplication des données pose problème (les données sont très volumineuses) ou que les données changent très régulièrement alors il peut être plus performant de ne <span class='highlight'>conserver dans la table 'users_by_email' que l'email et l'id</span> et de faire ensuite une nouvelle requête à C* pour obtenir les autres informations de la table 'users'.
+						</p>
+					</section>
+
+					<!-- TODO : jouer avec l'insertion des données ici -->
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Les insertions</h3>
+						<p>
+							Réaliser l'exercice <a href="https://github.com/mNantern/formation-cassandra/blob/master/exercices/03_inserer_donnees.md">exercices/03_inserer_donnees.md</a>
+						</p>
+					</section>
+
+					<section>
+						<h3>Upsert</h3>
+						<p>Qu'est ce qu'il vient de se passer ?</p>
+						<p>Dans C* <span class='highlight'>le dernier qui écrit a raison</span>: LWW (Last Write Wins)</p>
+						<p>On retourne à l'exercice !</p>
+					</section>
+
+					<section>
+						<h3>Quelle est la différence ?</h3>
+						<p class="fragment">Il n'y en a pas.</p>
+						<p class="fragment">Enfin presque: les compteurs</p>
+						<p class="fragment">Mais c'est une autre histoire.</p>
+					</section>
+
+					<section>
+						<div class="github-fork-ribbon right-top" title="v2.2"></div>
+						<h3>Le problème</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a faucibus justo. Cras cursus ornare semper. Maecenas a ante libero. Nulla eu odio vitae eros euismod pellentesque nec nec nisi. Etiam porttitor vitae nibh eget consequat. Nullam dapibus orci non faucibus semper. Phasellus aliquet lorem ante, vitae pulvinar odio egestas non. Vestibulum eros quam, semper ut consequat eu, iaculis nec ipsum. Integer consequat neque at tellus ultricies, non volutpat nisl convallis. Etiam ex purus, imperdiet et dui ut, dapibus bibendum felis. Sed imperdiet, lacus eget tempus tincidunt, ex metus vulputate neque, et iaculis elit velit at nibh. Cras eu viverra felis. Nam sed facilisis lectus, pretium efficitur nunc.</p>
+					</section>
+
+					<section>
+						<div class="github-fork-ribbon right-top" title="v2.2"></div>
+						<h3>La solution, les LWT</h3>
+						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a faucibus justo. Cras cursus ornare semper. Maecenas a ante libero. Nulla eu odio vitae eros euismod pellentesque nec nec nisi. Etiam porttitor vitae nibh eget consequat. Nullam dapibus orci non faucibus semper. Phasellus aliquet lorem ante, vitae pulvinar odio egestas non. Vestibulum eros quam, semper ut consequat eu, iaculis nec ipsum. Integer consequat neque at tellus ultricies, non volutpat nisl convallis. Etiam ex purus, imperdiet et dui ut, dapibus bibendum felis. Sed imperdiet, lacus eget tempus tincidunt, ex metus vulputate neque, et iaculis elit velit at nibh. Cras eu viverra felis. Nam sed facilisis lectus, pretium efficitur nunc.</p>
+					</section>
+
+					<!-- TODO : prendre une nouvelle table et parler des clés primaires -->
+					<section>
 						<h3>Clé primaire</h3>
 						<p>Clé de partitionement, colonnes de clustering, clé composée,...</p>
 					</section>
@@ -553,17 +650,12 @@ CREATE TABLE users (
 						<h3>Stockage physique des données</h3>
 						<p>partitions, partition key,clustering columns,cellules,...</p>
 					</section>
-					<section>
-						<h3>Les types de données</h3>
-						<p>UUID, Time UUID, ...</p>
-					</section>
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-						<h3>Première table et premières requêtes</h3>
+						<h3>Stocker les données de mon objet</h3>
 						<p>Créer une table permettant d'héberger les données d'un objet connecté</p>
 					</section>
 					<section>
-						<h3>Upsert</h3>
-						<p>LWW: last write wins</p>
+						<h3>Comment modéliser une relation 1-n ?</h3>
 					</section>
 					<section>
 						<h3>Clustering columns</h3>
@@ -574,10 +666,8 @@ CREATE TABLE users (
 						<h3>Reprendre l'exemple précédent en ordonnant les données de la plus récente à la plus ancienne</h3>
 						<p>2 possibilités: directement dans la requête ou lors de la construction de la table</p>
 					</section>
-					<section>
-						<h3>Index secondaire</h3>
-						<p>Quand ne pas les utiliser, comment faire autrement ?</p>
-					</section>
+
+					<!-- TODO : les autres types de données -->
 					<section>
 						<h3>Les collections</h3>
 					</section>
@@ -588,19 +678,13 @@ CREATE TABLE users (
 						<h3>Les compteurs</h3>
 					</section>
 					<section>
-						<h3>La dénormalisation</h3>
-					</section>
-					<section>
-						<h3>Comment modéliser une relation 1-n ?</h3>
-					</section>
-					<section>
-						<div class="github-fork-ribbon right-top" title="v2.2"></div>
-						<h3>LWT</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a faucibus justo. Cras cursus ornare semper. Maecenas a ante libero. Nulla eu odio vitae eros euismod pellentesque nec nec nisi. Etiam porttitor vitae nibh eget consequat. Nullam dapibus orci non faucibus semper. Phasellus aliquet lorem ante, vitae pulvinar odio egestas non. Vestibulum eros quam, semper ut consequat eu, iaculis nec ipsum. Integer consequat neque at tellus ultricies, non volutpat nisl convallis. Etiam ex purus, imperdiet et dui ut, dapibus bibendum felis. Sed imperdiet, lacus eget tempus tincidunt, ex metus vulputate neque, et iaculis elit velit at nibh. Cras eu viverra felis. Nam sed facilisis lectus, pretium efficitur nunc.</p>
-					</section>
-					<section>
 						<h3>Et bien plus !</h3>
 						<p>UDF, ...</p>
+					</section>
+
+					<!-- TODO : à enlever ? technique de modélisation des données -->
+					<section>
+						<h3>La dénormalisation</h3>
 					</section>
 				</section>
 
