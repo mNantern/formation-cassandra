@@ -603,7 +603,6 @@ CREATE TABLE users (
 						</p>
 					</section>
 
-					<!-- TODO : jouer avec l'insertion des données ici -->
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
 						<h3>Les insertions</h3>
 						<p>
@@ -615,7 +614,9 @@ CREATE TABLE users (
 						<h3>Upsert</h3>
 						<p>Qu'est ce qu'il vient de se passer ?</p>
 						<p>Dans C* <span class='highlight'>le dernier qui écrit a raison</span>: LWW (Last Write Wins)</p>
-						<p>On retourne à l'exercice !</p>
+						<p>
+							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
+						</p>
 					</section>
 
 					<section>
@@ -626,15 +627,20 @@ CREATE TABLE users (
 					</section>
 
 					<section>
-						<div class="github-fork-ribbon right-top" title="v2.2"></div>
 						<h3>Le problème</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a faucibus justo. Cras cursus ornare semper. Maecenas a ante libero. Nulla eu odio vitae eros euismod pellentesque nec nec nisi. Etiam porttitor vitae nibh eget consequat. Nullam dapibus orci non faucibus semper. Phasellus aliquet lorem ante, vitae pulvinar odio egestas non. Vestibulum eros quam, semper ut consequat eu, iaculis nec ipsum. Integer consequat neque at tellus ultricies, non volutpat nisl convallis. Etiam ex purus, imperdiet et dui ut, dapibus bibendum felis. Sed imperdiet, lacus eget tempus tincidunt, ex metus vulputate neque, et iaculis elit velit at nibh. Cras eu viverra felis. Nam sed facilisis lectus, pretium efficitur nunc.</p>
+						<img src="media/lwt.png"/>
 					</section>
 
 					<section>
-						<div class="github-fork-ribbon right-top" title="v2.2"></div>
+						<div class="github-fork-ribbon right-top" title="v2.0"></div>
 						<h3>La solution, les LWT</h3>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque a faucibus justo. Cras cursus ornare semper. Maecenas a ante libero. Nulla eu odio vitae eros euismod pellentesque nec nec nisi. Etiam porttitor vitae nibh eget consequat. Nullam dapibus orci non faucibus semper. Phasellus aliquet lorem ante, vitae pulvinar odio egestas non. Vestibulum eros quam, semper ut consequat eu, iaculis nec ipsum. Integer consequat neque at tellus ultricies, non volutpat nisl convallis. Etiam ex purus, imperdiet et dui ut, dapibus bibendum felis. Sed imperdiet, lacus eget tempus tincidunt, ex metus vulputate neque, et iaculis elit velit at nibh. Cras eu viverra felis. Nam sed facilisis lectus, pretium efficitur nunc.</p>
+						<h6>LightWeight Transaction</h6>
+						<p>Se base sur un algorithme de consensus distribué, Paxos.</p>
+						<p>Ce mécanisme ajoute le mot clé "IF" dans CQL et permet de réaliser des requêtes de type "IF NOT EXISTS" ou "IF column1=value".</p>
+						<p>Ce processus est quatre fois plus couteux qu'une insertion classique. Il faut donc l'utiliser uniquement dans les cas où il est nécessaire.</p>
+						<p>
+							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
+						</p>
 					</section>
 
 					<!-- TODO : prendre une nouvelle table et parler des clés primaires -->
