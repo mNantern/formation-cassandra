@@ -534,6 +534,10 @@ CREATE TABLE users (
 						</ul>
 					</section>
 
+					<section>
+						<h3>Lire des données</h3>
+					</section>
+
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
 						<h3>Première table et premières requêtes</h3>
 						<p>
@@ -576,7 +580,7 @@ CREATE TABLE users (
 							<li>Si la requête est restreinte par la clé de partitionnement</li>
 						</ul>
 						<p>
-							Le plus simple est d'oublier les index secondaires.
+							<span class='highlight'>Le plus simple est d'oublier les index secondaires.</span>
 						</p>
 					</section>
 
@@ -601,6 +605,10 @@ CREATE TABLE users (
 						<p>
 							Si la duplication des données pose problème (les données sont très volumineuses) ou que les données changent très régulièrement alors il peut être plus performant de ne <span class='highlight'>conserver dans la table 'users_by_email' que l'email et l'id</span> et de faire ensuite une nouvelle requête à C* pour obtenir les autres informations de la table 'users'.
 						</p>
+					</section>
+
+					<section>
+						<h3>Insérer des données</h3>
 					</section>
 
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
@@ -645,35 +653,61 @@ CREATE TABLE users (
 
 					<!-- TODO : prendre une nouvelle table et parler des clés primaires -->
 					<section>
+						<h3>La clé primaire</h3>
+					</section>
+					<section>
 						<h3>Clé primaire</h3>
-						<p>Clé de partitionement, colonnes de clustering, clé composée,...</p>
+						<p>
+							Jusqu'à présent nous avons vu des tables avec des clés primaires simples. Mais il est possible de créer des clés primaires bien plus évoluées afin de modéliser au mieux les requêtes que l'on a besoin d'exécuter.
+						</p>
+						<p>
+							Quelques éléments de vocabulaire:
+						</p>
+						<ul>
+							<li><span class='highlight'>clé de partitionnement: la "première colonne" de notre clé primaire</span></li>
+							<li><span class='highlight'>colonne de clustering:</span> toutes les autres colonnes composant la clé primaire</li>
+							<li><span class='highlight'>clé de partitionnement composée:</span> une clé de partitionnement composée de plusieurs colonnes</li>
+						</ul>
 					</section>
 					<section>
 						<h3>Clé de partitionement</h3>
-						<p>Toutes les requêtes doivent spécifier la clé de partitionement. Pas de range query (=> full cluster scan)</p>
+						<p>C'est un élément central dans le design de nos tables. Cette clé indique <span class='highlight'>sur quelle machine de notre cluster les données sont stockées</span>.</p>
+						<p>
+							La clé de partitionnement étant obligatoire dans les requêtes réalisées sur C*, il est important de la créer afin qu'elle soit la plus proche possible des requêtes que l'on souhaite effectuer sur notre cluster.
+						</p>
+					</section>
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Le design de la clé primaire</h3>
+						<p>
+							Réaliser l'exercice <a href="https://github.com/mNantern/formation-cassandra/blob/master/exercices/04_cle_primaire.md">exercices/04_cle_primaire.md</a>
+						</p>
 					</section>
 					<section>
 						<h3>Stockage physique des données</h3>
 						<p>partitions, partition key,clustering columns,cellules,...</p>
 					</section>
-					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-						<h3>Stocker les données de mon objet</h3>
-						<p>Créer une table permettant d'héberger les données d'un objet connecté</p>
-					</section>
-					<section>
-						<h3>Comment modéliser une relation 1-n ?</h3>
-					</section>
 					<section>
 						<h3>Clustering columns</h3>
-						<p>Possibiliter d'ordonner les colonnes de clustering</p>
-						<p>Possibiliter de faire des range requests</p>
+						<p>Possibilité d'ordonner les colonnes de clustering</p>
+						<p>Possibilité de faire des range requests</p>
+						<p>
+							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
+						</p>
 					</section>
-					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
-						<h3>Reprendre l'exemple précédent en ordonnant les données de la plus récente à la plus ancienne</h3>
-						<p>2 possibilités: directement dans la requête ou lors de la construction de la table</p>
+					<section>
+						<h3>Limiter la taille des partitions</h3>
+						<p>
+							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
+						</p>
+					</section>
+					<section>
+						<h3>Modéliser une relation 1-n, n-n</h3>
 					</section>
 
 					<!-- TODO : les autres types de données -->
+					<section>
+						<h3>Modélisation avancée</h3>
+					</section>
 					<section>
 						<h3>Les collections</h3>
 					</section>
@@ -684,8 +718,23 @@ CREATE TABLE users (
 						<h3>Les compteurs</h3>
 					</section>
 					<section>
-						<h3>Et bien plus !</h3>
-						<p>UDF, ...</p>
+						<h3>Fonctions</h3>
+						<p>UDF, UDA</p>
+					</section>
+					<section>
+						<h3>Materialized View</h3>
+					</section>
+					<section>
+						<h3>TTL et Tombstone</h3>
+					</section>
+					<section>
+						<h3>Batch</h3>
+					</section>
+					<section>
+						<h3>Static</h3>
+					</section>
+					<section>
+						<h3>Frozen</h3>
 					</section>
 				</section>
 
