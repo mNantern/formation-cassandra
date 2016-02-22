@@ -26,9 +26,11 @@ vagrant up
 ```
 vagrant ssh
 ```
-#### Arrêter la VM: 
+#### Arrêter la VM:
 ```
 vagrant halt
 ```
 
 ## Installation avec Docker
+
+Si vous préférez utiliser Docker il existe une image officielle [disponible sur le docker Hub](https://hub.docker.com/_/cassandra/)
