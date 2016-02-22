@@ -4,9 +4,9 @@
 
 Mon client vient d'exprimer une demande pour mon application cassandra-iot:
 
-> Je veux pouvoir récupérer les données remontées par un objet connecté
+> Je veux pouvoir récupérer les données remontées par mon smartphone
 
-Modéliser la table `data` destinée à stocker les données d'un objet connecté sachant qu'une donnée est composée d'une date et d'une valeur.
+Modéliser la table `data` destinée à stocker les données d'un smartphone sachant qu'une donnée est composée d'une date et d'une valeur et que le smartphone remonte plusieurs types de données.
 
 ## Utiliser une colonne de clustering
 
@@ -20,6 +20,7 @@ Proposer une modélisation utilisant une [colonne de clustering](https://docs.da
 
 ## Range request
 
+Créer une table `data` permettant de récupérer les données du capteur en fonction de la date.
 Importer les données du fichier TODO
 Récupérer l'ensemble des données pour le capteur TODO situé entre les dates TODO et TODO.
 
@@ -34,3 +35,7 @@ Utilisez pour cela un ["clustering order"](https://docs.datastax.com/en/cql/3.3/
 **=> Retour aux slides !**
 
 ## Limiter la taille de la partition
+
+Notre capteur peut remonter des données toutes les secondes ce qui fait que l'on dépassera le milion de valeur dans notre partition en un peu plus de 11 jours.
+
+Modéliser une table permettant de stocker l'ensemble des données de notre capteur pendant de nombreuses années.

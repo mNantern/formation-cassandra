@@ -516,7 +516,7 @@ WITH REPLICATION = {
 						<p>Les tables contiennent les données.</p>
 						<pre><code data-trim contenteditable>
 CREATE TABLE users (
-	user_id UUID PRIMARY KEY,
+	id UUID PRIMARY KEY,
 	first_name TEXT,
 	last_name TEXT,
 	email TEXT
@@ -651,7 +651,6 @@ CREATE TABLE users (
 						</p>
 					</section>
 
-					<!-- TODO : prendre une nouvelle table et parler des clés primaires -->
 					<section>
 						<h3>La clé primaire</h3>
 					</section>
@@ -664,7 +663,7 @@ CREATE TABLE users (
 							Quelques éléments de vocabulaire:
 						</p>
 						<ul>
-							<li><span class='highlight'>clé de partitionnement: la "première colonne" de notre clé primaire</span></li>
+							<li><span class='highlight'>clé de partitionnement:</span> la "première colonne" de notre clé primaire</li>
 							<li><span class='highlight'>colonne de clustering:</span> toutes les autres colonnes composant la clé primaire</li>
 							<li><span class='highlight'>clé de partitionnement composée:</span> une clé de partitionnement composée de plusieurs colonnes</li>
 						</ul>
@@ -684,57 +683,436 @@ CREATE TABLE users (
 					</section>
 					<section>
 						<h3>Stockage physique des données</h3>
-						<p>partitions, partition key,clustering columns,cellules,...</p>
+						<img src="media/Cassandra_physical_storage1.png"/>
+					</section>
+					<section>
+						<h3>Stockage des partitions</h3>
+						<ul>
+							<li>
+								Les <span class='highlight'>partitions sont distribuées sur les différents noeuds</span> du cluster
+							</li>
+							<li>
+								Un algorithme de hash permet de déterminer rapidement quel noeud possède la partition recherchée
+							</li>
+							<li>
+								Il est possible de <span class='highlight'>faire un 'WHERE' sur la clé de partition</span> mais le faire sur une autre colonne impliquerai de scanner toutes les partitions sur tous les noeuds.
+							</li>
+						</ul>
+						<img src="media/kllm.gif"/>
 					</section>
 					<section>
 						<h3>Clustering columns</h3>
-						<p>Possibilité d'ordonner les colonnes de clustering</p>
-						<p>Possibilité de faire des range requests</p>
+						<p>Il est possible d'ajouter à la clé de partitionnement d'autres colonnes appelées "Colonne de clustering".</p>
+						<p>Le clustering est le processus qui trie les données au sein d'une même partition. Comme les données sont triées sur disque il est extrêmement performant de récupérer une partie de la partition (lecture séquentielle sur le disque)</p>
+					</section>
+					<section>
+						<h3>Clustering columns</h3>
+						<p>On peut alors, grâce au clustering columns réaliser des requêtes de ce type:</p>
+						<pre><code data-trim contenteditable>
+SELECT * FROM data
+  WHERE partition_key=value_partition_key
+  AND clustering_column1=value1
+						</code></pre>
+						<p>
+							Voir même des "range requests":
+						</p>
+						<pre><code data-trim contenteditable>
+SELECT * FROM data
+  WHERE partition_key=value_partition_key
+  AND clustering_column1 > value1
+						</code></pre>
 						<p>
 							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
 						</p>
+					</section>
+					<section>
+						<h3>Stockage physique des données 2</h3>
+						<pre><code data-trim contenteditable>
+CREATE TABLE data (
+  id UUID,
+  year TEXT,
+  value TEXT,
+  event_time timestamp,
+  PRIMARY KEY (year,id)
+);
+						</code></pre>
+						<table>
+							<thead>
+								<tr>
+									<th>year</th>
+									<th>id</th>
+									<th>value</th>
+									<th>event_time</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>2016</td>
+									<td>1</td>
+									<td>7</td>
+									<td>2016-02-19T17:13:21Z</td>
+								</tr>
+								<tr>
+									<td>2016</td>
+									<td>2</td>
+									<td>18</td>
+									<td>2016-02-25T17:13:21Z</td>
+								</tr>
+								<tr>
+									<td>2015</td>
+									<td>3</td>
+									<td>2</td>
+									<td>2015-12-19T07:13:21Z</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section>
+						<h3>Stockage physique des données 2</h3>
+						<img src="media/Cassandra_physical_storage2.png"/>
 					</section>
 					<section>
 						<h3>Limiter la taille des partitions</h3>
 						<p>
+							Le nombre maximal de valeurs par partition est 2 milliards en théorie. La partition doit également tenir sur le disque d'un seul noeud.
+						</p>
+						<p>
+							En pratique il faut éviter de dépasser quelques centaines de milliers de valeur par partition et quelques centaines de Mo.
+						</p>
+						<p>
 							<span class='highlight'><b>=> Retour à l'exercice !</b></span>
 						</p>
 					</section>
 					<section>
-						<h3>Modéliser une relation 1-n, n-n</h3>
+						<h3>Stockage physique des données 3</h3>
+						<pre><code data-trim contenteditable>
+CREATE TABLE data (
+	id UUID,
+	smartphone_id UUID,
+	year TEXT,
+	value TEXT,
+	event_time timestamp,
+	PRIMARY KEY ((smartphone_id,year),id)
+);
+						</code></pre>
+						<table>
+							<thead>
+								<tr>
+									<th>smartphone_id</th>
+									<th>year</th>
+									<th>id</th>
+									<th>value</th>
+									<th>event_time</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>SAMSUNG_1567</td>
+									<td>2016</td>
+									<td>1</td>
+									<td>7</td>
+									<td>2016-02-19T17:13:21Z</td>
+								</tr>
+								<tr>
+									<td>SAMSUNG_1567</td>
+									<td>2016</td>
+									<td>2</td>
+									<td>18</td>
+									<td>2016-02-25T17:13:21Z</td>
+								</tr>
+								<tr>
+									<td>SAMSUNG_1567</td>
+									<td>2015</td>
+									<td>3</td>
+									<td>2</td>
+									<td>2015-12-19T07:13:21Z</td>
+								</tr>
+							</tbody>
+						</table>
+					</section>
+					<section>
+						<h3>Stockage physique des données 3</h3>
+						<img src="media/Cassandra_physical_storage3.png"/>
+					</section>
+					<section>
+						<h3>Requêtes</h3>
+						<ul>
+							<li>
+								<span class='highlight'>Sur la clé de partitionnement:</span> = et IN
+							</li>
+							<li>
+								<span class='highlight'>Sur les colonnes de clustering:</span> <, <=, >, >= et IN
+							</li>
+						</ul>
+						<br />
+						<br />
+						<h3>Ordre</h3>
+						<ul>
+							<li>
+								<span class='highlight'>sur la clé de partitionnement:</span> aucun ordre
+							</li>
+							<li>
+								<span class='highlight'>Sur les colonnes de clustering:</span> ordonné en fonction de l'ordre de déclaration des colonnes
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Modélisation des relations</h3>
+						<ul>
+							<li>
+								<span class='highlight'>Relation 1-1:</span> une relation 1-1 peut être modélisée en utilisant une simple clé primaire
+							</li>
+							<li>
+								<span class='highlight'>Relation 1-n:</span> une relation 1-n peut être modélisée en utilisant une clé primaire composée d'une partition key et d'au moins une clustering key
+							</li>
+							<li>
+								<span class='highlight'>Relation m-n:</span> une relation n-n peut être modélisée en utilisant une clé primaire composée d'une clé de partition composée et d'au moins une clustering key
+							</li>
+						</ul>
 					</section>
 
-					<!-- TODO : les autres types de données -->
 					<section>
 						<h3>Modélisation avancée</h3>
 					</section>
 					<section>
 						<h3>Les collections</h3>
+						<p>
+							Depuis la version 1.2 de C* il est possible de créer des colonnes de type collection (list, set et map).
+						</p>
+						<p>
+							Les collections ne peuvent pas être découpée. Cassandra lira la collection en entier. De ce fait il ne faut pas dépasser quelques milliers d'éléments par collection.
+						</p>
+						<p>
+							Il n'est pas possible d'inclure une collection dans une collection.
+						</p>
 					</section>
 					<section>
-						<h3>UDT: User Defined Type</h3>
-					</section>
-					<section>
+						<div class="github-fork-ribbon right-top" title="v2.1"></div>
 						<h3>Les compteurs</h3>
+						<p>
+							Il est possible de stocker un compteur qui compte un nombre d'occurence.
+						</p>
+						<p>
+							Attention, si une table a une colonne de type counter, toutes les colonnes non-"counter" doivent faire partie de la clé primaire.
+						</p>
+						<pre><code data-trim contenteditable>
+CREATE TABLE devicesByUser (
+  user_id UUID,
+  number_devices COUNTER,
+  PRIMARY KEY (user_id)
+);
+
+UPDATE devicesByUser SET number_devices = number_devices + 2
+  WHERE user_id = 1;
+						</code></pre>
 					</section>
 					<section>
-						<h3>Fonctions</h3>
-						<p>UDF, UDA</p>
-					</section>
-					<section>
-						<h3>Materialized View</h3>
-					</section>
-					<section>
-						<h3>TTL et Tombstone</h3>
-					</section>
-					<section>
-						<h3>Batch</h3>
+						<h3>TTL: Time To Live</h3>
+						<p>
+							Il est possible d'ajouter une durée de vie à une donnée (ligne ou colonne individuelle) au moment de l'insertion. Cassandra se chargera alors de supprimer cette donnée une fois la durée écoulée.
+						</p>
+						<pre><code data-trim contenteditable>
+INSERT INTO data (id, event_time, value)
+  VALUES ('1','2015-12-19T07:13:21Z',34) USING TTL 3600;
+
+UPDATE data USING TTL 30 SET value=12 WHERE id='1';
+						</code></pre>
 					</section>
 					<section>
 						<h3>Static</h3>
+						<p>
+							Une colonne statique est une colonne qui est partagée par toutes les lignes de la même partition.
+						</p>
+						<pre><code data-trim contenteditable>
+CREATE TABLE t (
+  k text,
+  s text STATIC,
+  i int,
+  PRIMARY KEY (k, i)
+);
+
+INSERT INTO t (k, s, i) VALUES ('k', 'I''m shared', 1);
+INSERT INTO t (k, s, i) VALUES ('k', 'I''m still shared', 2);
+SELECT * FROM t;
+						</code></pre>
+						<p>
+							Et le résultat:
+						</p>
+						<table>
+							<thead>
+								<tr>
+									<th>k</th>
+									<th>s</th>
+									<th>i</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>k</td>
+									<td>I'm still shared</td>
+									<td>1</td>
+								</tr>
+								<tr>
+									<td>k</td>
+									<td>I'm still shared</td>
+									<td>2</td>
+								</tr>
+							</tbody>
+						</table>
 					</section>
 					<section>
-						<h3>Frozen</h3>
+						<h3>Batch</h3>
+						<p>
+							Une requête "batch" permet de combiner de multiples INSERT, UPDATE et DELETE au sein d'une même opération logique:
+						</p>
+						<pre><code data-trim contenteditable>
+BEGIN BATCH
+INSERT INTO t (k, s, i) VALUES ('k', 'I''m shared', 1);
+INSERT INTO t (k, s, i) VALUES ('k', 'I''m still shared', 2);
+APPLY BATCH;
+						</code></pre>
+						<ul>
+							<li>
+								Un BATCH est atomique: si une requête échoue alors toutes les requêtes du BATCH échouent.
+							</li>
+							<li>
+								Un BATCH n'est pas isolé: d'autres requêtes peuvent voir les données écritent par un batch en cours d'exécution.
+							</li>
+						</ul>
+					</section>
+					<section>
+						<div class="github-fork-ribbon right-top" title="v2.1"></div>
+						<h3>UDT: User Defined Type</h3>
+						<p>
+							Il est possible de déclarer dans C* des structures plus complexes. Par exemple si je souhaite gérer des listes d'adresses comment faire ?
+						</p>
+						<p>
+							Deux possibilités:
+						</p>
+						<ol>
+							<li>
+								Déclarer une list<text> et mettre dans le texte notre adresse (sous forme de JSON par exemple)
+							</li>
+							<li>
+								Utiliser un UDT afin de déclarer de manière explicite notre adresse
+							</li>
+						</ol>
+					</section>
+					<section>
+							<div class="github-fork-ribbon right-top" title="v2.1"></div>
+							<h3>UDT: User Defined Type</h3>
+						<pre><code data-trim contenteditable>
+CREATE TYPE address (
+  street text,
+  city text,
+  zip int
+);
+
+CREATE TABLE user_profiles (
+  login text PRIMARY KEY,
+  first_name text,
+  last_name text,
+  email text,
+  addresses map&lt;text, frozen&lt;address&gt;&gt;
+);
+					</code></pre>
+				</section>
+					<section>
+							<div class="github-fork-ribbon right-top" title="v2.1"></div>
+							<h3>UDT: User Defined Type</h3>
+					<pre><code data-trim contenteditable>
+// Inserts a user with a home address
+INSERT INTO user_profiles(login, first_name, last_name, addresses)
+VALUES ('tsmith', 'Tom', 'Smith',
+  { 'home': { street: '1021 West 4th St. #202',
+    city: 'San Fransisco',
+    zip: 94110 }});
+
+// Adds a work address for our user
+UPDATE user_profiles
+  SET addresses = addresses
+  + { 'work': { street: '3975 Freedom Circle Blvd',
+    city: 'Santa Clara',
+    zip: 95050 }}
+  WHERE login = 'tsmith';
+						</code></pre>
+					</section>
+					<section>
+						<div class="github-fork-ribbon right-top" title="v3.0"></div>
+						<h3>Materialized View</h3>
+						<p>
+							Nous avons vu au début de cette partie que pour faire des requêtes sur des colonnes ne faisant pas partie de la clé de partitionnement <span class='highlight'>il fallait dénormaliser</span> et <span class='highlight'>créer des tables adaptées aux requêtes</span> que l'on souhaitaient faire. Les index secondaires ne sont pas la solution car ils ne sont pas suffisament performants.
+						</p>
+						<p>
+							Cassandra 3 fournit un nouveau mécanisme appelé Materialized View qui est en fait une <span class='highlight'>dénormalisation effectuée automatiquement côté serveur</span>.
+						</p>
+					</section>
+					<section>
+						<div class="github-fork-ribbon right-top" title="v3.0"></div>
+						<h3>Materialized View</h3>
+						<p>
+							Reprenons notre exemple initial: nous voulons pouvoir obtenir les informations de l'utilisateur en fonction de l'email de l'utilisateur et pas seulement depuis son id.
+						</p>
+						<pre><code data-trim contenteditable>
+CREATE TABLE users (
+  id UUID PRIMARY KEY,
+  first_name TEXT,
+  last_name TEXT,
+  email TEXT
+);
+
+CREATE MATERIALIZED VIEW user_by_email
+AS SELECT *  //denormalize ALL columns
+FROM users
+WHERE email IS NOT NULL AND id IS NOT NULL
+PRIMARY KEY(email, id);
+					</code></pre>
+					</section>
+					<section>
+						<div class="github-fork-ribbon right-top" title="v3.0"></div>
+						<h3>Materialized View</h3>
+						<p>
+							Il n'y a rien de particulier à faire ensuite, on insère les données normalement dans la table users et on peut lire les données depuis la vue user_by_email:
+						</p>
+						<pre><code data-trim contenteditable>
+INSERT INTO users(id,first_name,last_name,email) VALUES(1, 'John', 'DOE', 'jdoe@gmail.com');
+INSERT INTO users(id,first_name,last_name,email) VALUES(2, 'Helen', 'SUE', 'hsue@yahoo.com');
+
+SELECT * FROM user_by_email;
+					</code></pre>
+					<table>
+						<thead>
+							<tr>
+								<th>email</th>
+								<th>id</th>
+								<th>first_name</th>
+								<th>last_name</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>jdoe@gmail.com</td>
+								<td>1</td>
+								<td>'John'</td>
+								<td>'DOE'</td>
+							</tr>
+							<tr>
+								<td>hsue@yahoo.com</td>
+								<td>2</td>
+								<td>'Helen'</td>
+								<td>'SUE'</td>
+							</tr>
+						</tbody>
+					</table>
+					</section>
+					<section>
+						<h3>Et bien plus...</h3>
+						<p>
+							Il est possible de faire encore bien plus avec le CQL (UDF, UDA, tuples, ...).
+						</p>
+						<p>
+								Pour plus d'informations une <a href="https://docs.datastax.com/en/cql/3.3/cql/cqlIntro.html">documentation très complète est disponible</a>.
+						</p>
 					</section>
 				</section>
 
@@ -747,6 +1125,19 @@ CREATE TABLE users (
 				<section>
 					<section>
 						<h1>Préparer Cassandra pour la production</h1>
+					</section>
+					<section>
+						<h3>Stratégies de réplication</h3>
+						<p>SimpleStrategy, NetworkTopologyStrategie</p>
+					</section>
+					<section>
+						<h3>Stratégies de compaction</h3>
+					</section>
+					<section>
+						<h3>Query Tracing</h3>
+					</section>
+					<section>
+						<h3>Authentification et Autorisation</h3>
 					</section>
 				</section>
 
