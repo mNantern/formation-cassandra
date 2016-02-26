@@ -483,9 +483,9 @@ WITH REPLICATION = {
 					</section>
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
 						<h3>L'application Cassandra-iot</h3>
-						<p>Nous allons développer la partie back d'une application destinée à gérer des objets connectés.</p>
-						<p>Cette application devra être capable de gérer les données provenant de millions d'objets de manière performante et sans interruption de service.</p>
-						<p>Notre application devra être capable de déclarer des familles d'objets connectés, de créer un objet connecté, d'envoyer des données sur cet objet et de gérer des comptes utilisateurs.</p>
+						<p>Nous allons développer la partie back d'une application destinée à gérer les capteurs d'un smartphone.</p>
+						<p>Cette application devra être capable de gérer les données provenant de millions de capteurs de manière performante et sans interruption de service.</p>
+						<p>Notre application devra être capable de déclarer des smartphones, d'envoyer et de lire des données sur cet objet et de gérer des comptes utilisateurs.</p>
 					</section>
 					<section>
 						<h3>Keyspaces</h3>
@@ -1119,6 +1119,94 @@ SELECT * FROM user_by_email;
 				<section>
 					<section>
 						<h1>Créer une application Java scalable</h1>
+					</section>
+					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+						<h3>Rappel: L'application Cassandra-iot</h3>
+						<p>Nous allons développer la partie back d'une application destinée à gérer les capteurs d'un smartphone.</p>
+						<p>Cette application devra être capable de gérer les données provenant de millions de capteurs de manière performante et sans interruption de service.</p>
+						<p>Notre application devra être capable de déclarer des smartphones, d'envoyer et de lire des données sur cet objet et de gérer des comptes utilisateurs.</p>
+					</section>
+					<section>
+						<h3>Le but</h3>
+						<p>
+							L'application présente dans le dossier cassandra-iot a pour but de manipuler Cassandra au travers de Java sans avoir besoin de tout implémenter.
+						</p>
+						<p>
+							Le but va être de finir les 3 sprints en réalisant les US demandés par notre PO. Chaque sprint contient des demandes qui nous amèneront à faire évoluer notre modèle.
+						</p>
+						<p>
+							Nous disposons de 3 données principales dans notre modèle: des smartphone, des data et des utilisateurs.
+						</p>
+					</section>
+					<section>
+						<h3>Les technologies</h3>
+						<ul>
+							<li>
+								Cassandra
+							</li>
+							<li>
+								Le driver Java de Datastax
+							</li>
+							<li>
+								Spring Boot
+							</li>
+							<li>
+								Java 8
+							</li>
+							<li>
+								Maven
+							</li>
+							<li>
+								Jackson
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Sprint 1</h3>
+					</section>
+					<section>
+						<h3>Introduction: les applications mobiles</h3>
+						<img class="stretch" src="media/iot.png" />
+						<p>
+							Deux applications mobiles ont été réalisées pour cette formation:
+						</p>
+						<ul>
+							<li>
+								<a href="https://github.com/mNantern/formation-cassandra/releases/download/AppMobile/cassandra_iot_5.apk">Une application Android</a>
+							</li>
+							<li>
+								<a href="http://install.diawi.com/WxaK29">Une application iOS</a>
+							</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Présentation des US</h3>
+						<ol>
+							<li>
+								<span class='highlight'>US1:</span> Stockage des données des applications mobiles
+							</li>
+							<li>
+								<span class='highlight'>US2:</span> Lecture des données des applications mobiles
+							</li>
+							<li>
+								<span class='highlight'>US3:</span> Gestion d'un utilisateur
+							</li>
+							<li>
+								<span class='highlight'>US4:</span> Gestion des smartphones
+							</li>
+						</ol>
+					</section>
+					<section>
+						<h3>Sprint 2</h3>
+					</section>
+					<section>
+						<h3>Présentation des US</h3>
+					</section>
+					<section>
+						<h3>Sprint 3</h3>
+					</section>
+					<section>
+						<h3>Présentation des US</h3>
 					</section>
 				</section>
 
