@@ -1201,12 +1201,86 @@ SELECT * FROM user_by_email;
 					</section>
 					<section>
 						<h3>Présentation des US</h3>
+						<ol>
+							<li>
+								<span class='highlight'>US5:</span> assurer des requêtes efficaces en appelant le datacenter local
+							</li>
+							<li>
+								<span class='highlight'>US6:</span> Permettre d'afficher les données d'une date précise.
+							</li>
+							<li>
+								<span class='highlight'>US7:</span> Trier les données en fonction de la date et/ou du type.
+							</li>
+							<li>
+								<span class='highlight'>US8:</span> Seul le propriétaire du smartphone doit pouvoir le supprimer.
+							</li>
+							<li>
+								<span class='highlight'>US9:</span> Permettre d'ajouter un smartphone à un utilisateur.
+							</li>
+							<li>
+								<span class='highlight'>US10:</span> Eviter les créations de compte concurrentes.
+							</li>
+							<li>
+								<span class='highlight'>US11:</span> Afficher le nom du smartphone dans la liste des smartphones de l'utilisateur au lieu de son identifiant.
+							</li>
+						</ol>
+					</section>
+					<section>
+						<h3>US 11 : Plusieurs possibilités</h3>
+						<p>
+							Pour afficher le nom du smartphone au lieu de son identifiant il existe plusieurs options:
+						</p>
+						<ol>
+							<li>
+								Faire une requête de type 'SELECT ... IN (id1,id2)'
+							</li>
+							<li>
+								Faire N requêtes (une par smartphone) asynchrones
+							</li>
+							<li>
+								Dénormaliser l'information 'smartphone_name' dans la ressource utilisateur.
+							</li>
+						</ol>
 					</section>
 					<section>
 						<h3>Sprint 3</h3>
 					</section>
 					<section>
 						<h3>Présentation des US</h3>
+						<ol>
+							<li>
+								<span class='highlight'>US12:</span> Paginer la liste des données d'un smartphone
+							</li>
+							<li>
+								<span class='highlight'>US13:</span> Expirer les données d'un smartphone au bout de 3 mois.
+							</li>
+							<li>
+								<span class='highlight'>US14:</span> Administration des smartphones: lister l'ensemble des smartphones de manière paginée.
+							</li>
+							<li>
+								<span class='highlight'>US15:</span> Rechercher les smartphones par nom de modèle.
+							</li>
+							<li>
+								<span class='highlight'>US16:</span> Rechercher les smartphones par nom de constructeur.
+							</li>
+							<li>
+								<span class='highlight'>US17:</span> Afficher un compteur du nombre de données remontées pour chaque smartphone.
+							</li>
+							<li>
+								<span class='highlight'>US18:</span> Permettre la suppression d'un smartphone depuis la page utilisateur.
+							</li>
+						</ol>
+					</section>
+					<section>
+						<h3>Homework !</h3>
+						<ol>
+							<li>
+								<span class='highlight'>US19:</span> Partitionner les données des smartphones à la journée tout en conservant la recherche sur une plage de date et la pagination.
+							</li>
+							<li>
+								<span class='highlight'>US20:</span> Faire une recherche de smartphone en fonction du nom du constructeur et du nom du modèle.
+							</li>
+						</ol>
 					</section>
 				</section>
 

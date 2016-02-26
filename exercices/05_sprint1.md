@@ -28,6 +28,7 @@ La première étape consiste à modéliser notre table `data`. Voici les donnée
 Une fois la table modélisée et créée dans Cassandra il est nécessaire de coder le service associé au controller `POST /data`.
 
 Il existe trois façons d'exécuter des requêtes dans Cassandra avec le driver:
+
 1. Simple statement : la plus simple, nous l'avons utilisé pour créer notre keyspace.
 2. [Query Builder](https://docs.datastax.com/en/developer/java-driver/3.0/java-driver/reference/queryBuilder_r.html): permet de construire une requête CQL via une fluent API
 3. [Prepared statement](http://docs.datastax.com/en/developer/java-driver/3.0/java-driver/quick_start/qsSimpleClientBoundStatements_t.html) : la méthode la plus efficace et la plus sûre. Il ne faut pas préparée une requête deux fois !
