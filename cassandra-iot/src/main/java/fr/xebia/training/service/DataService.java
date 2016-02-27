@@ -3,6 +3,7 @@ package fr.xebia.training.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -41,7 +42,20 @@ public class DataService {
         .collect(Collectors.toList());
   }
 
-  public Collection<Data> getData(UUID smartphoneId) {
-    return dataRepository.getBySmartphoneId(smartphoneId);
+  public Collection<Data> getData(UUID smartphoneId, Instant startDate, Instant endDate) {
+    boolean startDateNull = (startDate == null);
+    boolean endDateNull = (endDate == null);
+    boolean allNull = startDateNull && endDateNull;
+
+    if(allNull){
+      return dataRepository.getBySmartphoneId(smartphoneId);
+    } else if(!startDateNull){
+      return dataRepository.getBySmartphoneIdStartDate(smartphoneId, startDate);
+    } else if (!endDateNull) {
+      return dataRepository.getBySmartphoneIdEndDate(smartphoneId, endDate);
+    } else {
+      return dataRepository.getBySmartphoneIdStartEndDate(smartphoneId, startDate, endDate);
+    }
+
   }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -42,8 +43,10 @@ public class DataController {
   }
 
   @RequestMapping(value={"/", ""}, method= RequestMethod.GET)
-  public Collection<Data> getData(@RequestParam UUID smartphoneId){
-    return dataService.getData(smartphoneId);
+  public Collection<Data> getData(@RequestParam UUID smartphoneId,
+                                  @RequestParam(required = false) Instant startDate,
+                                  @RequestParam(required = false) Instant endDate){
+    return dataService.getData(smartphoneId, startDate, endDate);
   }
 
 }
