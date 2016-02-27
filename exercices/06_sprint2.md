@@ -2,7 +2,7 @@
 
 ## Connexion à Cassandra
 
-### US5 : Appeler le datacenter local
+### US05 : Appeler le datacenter local
 
 Il est possible dans le driver Java de définir une 'LoadBalancingPolicy' qui va déterminer quel noeud va servir une requête.
 Par défaut un client peut interroger n'importe quel noeud (même si celui-ci ne possède pas la donnée: il jouera alors le rôle de coordinateur pour cette requête).
@@ -15,20 +15,20 @@ Pour éviter cela nous allons [configurer une 'LoadBalancingPolicy'](https://aca
 
 ![Smartphone Data v2](https://raw.githubusercontent.com/mNantern/formation-cassandra/master/exercices/data/media/smartphone_data2.png)
 
-### US6 : Pouvoir faire une recherche par date
+### US06 : Pouvoir faire une recherche par date
 
 Nous voulons pouvoir filtrer les résultats renvoyés par le service /data en fonction d'une date de début et d'une date de fin.
 
 1. Vérifier que la modélisation choisie permet d'effectuer les requêtes demandées
 2. Modifier le service afin de renvoyer les résultats filtrés
 
-### US7 : Trier les résultats par date et type de données
+### US07 : Trier les résultats par date et type de données
 
 Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la plus récente à la plus ancienne ou le contraire) et/ou du type de données.
 
 ## Smartphone
 
-### US8 : Seul le propriétaire du smartphone peut le supprimer
+### US08 : Seul le propriétaire du smartphone peut le supprimer
 
 1. Ajouter le propriétaire à notre table `smartphones`
 2. Ajouter le propriétaire du smartphone lors de la création du smartphone
@@ -39,7 +39,7 @@ Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la 
 
 ![User Details v2](https://raw.githubusercontent.com/mNantern/formation-cassandra/master/exercices/data/media/user2.png)
 
-### US9 : Ajout d'un smartphone à l'utilisateur
+### US09 : Ajout d'un smartphone à l'utilisateur
 
 Lors de la création d'un smartphone il est nécessaire de l'ajouter à l'utilisateur sans quoi le smartphone ne pourra pas être consulté depuis la page utilisateur.
 
