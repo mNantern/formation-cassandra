@@ -1,15 +1,24 @@
 package fr.xebia.training.repository;
 
 import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import fr.xebia.training.domain.model.Data;
+import fr.xebia.training.domain.model.Type;
+
+import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
 @Repository
 public class DataRepository {
@@ -40,6 +49,31 @@ public class DataRepository {
                                           data.getType().toString(),
                                           data.getValue()));
     });
+  }
+
+  public Collection<Data> getBySmartphoneId(UUID smartphoneId) {
+    // US02: récupérer l'ensemble des données liées à un smartphone
+    Statement select = QueryBuilder
+        .select()
+        .all()
+        .from("data")
+        .where(eq("smartphone_id",smartphoneId));
+
+    List<Row> results = session.execute(select).all();
+
+    return results.stream()
+        .map(this::rowToData)
+        .collect(Collectors.toList());
+  }
+
+  private Data rowToData(Row row){
+    return new Data.Builder()
+        .id(row.getUUID("id"))
+        .smartphoneId(row.getUUID("smartphone_id"))
+        .eventTime(row.getDate("event_time").toInstant())
+        .type(Type.valueOf(row.getString("type")))
+        .value(row.getString("value"))
+        .build();
   }
 
 }

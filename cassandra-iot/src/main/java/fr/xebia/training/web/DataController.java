@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
@@ -38,4 +40,11 @@ public class DataController {
     data.stream().forEach(d -> LOGGER.info(d.toString()));
     return data;
   }
+
+  @RequestMapping(value={"/", ""}, method= RequestMethod.GET)
+  @ResponseStatus(value = HttpStatus.OK)
+  public Collection<Data> getData(@RequestParam UUID smartphoneId){
+    return dataService.getData(smartphoneId);
+  }
+
 }

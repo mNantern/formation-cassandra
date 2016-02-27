@@ -40,4 +40,8 @@ public class DataService {
         })
         .collect(Collectors.toList());
   }
+
+  public Collection<Data> getData(UUID smartphoneId) {
+    return dataRepository.getBySmartphoneId(smartphoneId);
+  }
 }
