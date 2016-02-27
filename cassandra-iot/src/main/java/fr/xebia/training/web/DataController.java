@@ -42,7 +42,6 @@ public class DataController {
   }
 
   @RequestMapping(value={"/", ""}, method= RequestMethod.GET)
-  @ResponseStatus(value = HttpStatus.OK)
   public Collection<Data> getData(@RequestParam UUID smartphoneId){
     return dataService.getData(smartphoneId);
   }

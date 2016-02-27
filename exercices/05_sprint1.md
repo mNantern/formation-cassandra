@@ -42,6 +42,8 @@ Il existe trois façons d'exécuter des requêtes dans Cassandra avec le driver:
 
 Afin de créer la page exposée ci-dessus il faut pouvoir renvoyer la liste des données associées à un smartphoneId.
 
+:information_source:  pour le GET nous allons utiliser un QueryBuilder.
+
 ## Utilisateur
 
 On souhaite pouvoir afficher, modifier et supprimer les données d'**un utilisateur**:
@@ -52,6 +54,8 @@ On souhaite pouvoir afficher, modifier et supprimer les données d'**un utilisat
 
 1. Modélisez la table `users` en fonction des données nécessaires
 2. Coder les 4 méthodes de base permettant de gérer un utilisateur (Create, Read, Update, Delete)
+
+:information_source: pour insérer un UDT se reporter à [la documentation](https://docs.datastax.com/en/developer/java-driver/3.0/java-driver/reference/udtApi.html).
 
 ## Smartphone
 
