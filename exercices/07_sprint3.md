@@ -14,6 +14,7 @@ Afin de paginer les données nous allons utiliser un [PagingState](http://docs.d
 
 Afin de se mettre en conformité avec la CNIL nous devons expirer les données insérées au bout de 3 mois.
 Nous avons pour cela deux possibilités:
+
 1. Expirer les données en [modifiant la table `data`](http://docs.datastax.com/en/cql/3.3/cql/cql_reference/alter_table_r.html) pour assigner une valeur à la propriété [default_time_to_live](http://docs.datastax.com/en/cql/3.3/cql/cql_reference/tabProp.html)
 2. [Insérer un TTL](http://docs.datastax.com/en/cql/3.3/cql/cql_reference/insert_r.html?scroll=refInsert__timestamp_ttl) à chaque insertion de données en base
 
