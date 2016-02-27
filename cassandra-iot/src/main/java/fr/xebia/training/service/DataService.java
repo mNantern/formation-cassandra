@@ -49,10 +49,10 @@ public class DataService {
 
     if(allNull){
       return dataRepository.getBySmartphoneId(smartphoneId);
-    } else if(!startDateNull){
-      return dataRepository.getBySmartphoneIdStartDate(smartphoneId, startDate);
-    } else if (!endDateNull) {
+    } else if(startDateNull){
       return dataRepository.getBySmartphoneIdEndDate(smartphoneId, endDate);
+    } else if (endDateNull) {
+      return dataRepository.getBySmartphoneIdStartDate(smartphoneId, startDate);
     } else {
       return dataRepository.getBySmartphoneIdStartEndDate(smartphoneId, startDate, endDate);
     }

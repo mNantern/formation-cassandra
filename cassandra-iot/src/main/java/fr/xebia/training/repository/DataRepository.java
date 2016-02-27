@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import fr.xebia.training.domain.model.Data;
 import fr.xebia.training.domain.model.Type;
 
+import static com.datastax.driver.core.querybuilder.QueryBuilder.desc;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
 @Repository
@@ -27,11 +28,13 @@ public class DataRepository {
   public static final String INSERT_DATA =
       "INSERT INTO data (id, smartphone_id, event_time, type, value) VALUES (?, ?, ?, ?, ?); ";
   public static final String SELECT_DATA_START_DATE =
-      "select * from data WHERE smartphone_id=? AND event_time > ?;";
+      "select * from data WHERE smartphone_id=? AND event_time > ? ORDER BY event_time DESC;";
   public static final String SELECT_DATA_END_DATE =
-      "select * from data WHERE smartphone_id=? AND event_time <= ?;";
+      "select * from data WHERE smartphone_id=? AND event_time <= ? ORDER BY event_time DESC;";
   public static final String SELECT_DATA_START_END_DATE =
-      "select * from data WHERE smartphone_id=? AND event_time > ? AND event_time <= ?;";
+      "select * from data "
+      + "WHERE smartphone_id=? AND event_time > ? AND event_time <= ? "
+      + "ORDER BY event_time DESC;";
 
   private Session session;
 
@@ -70,7 +73,9 @@ public class DataRepository {
         .select()
         .all()
         .from("data")
-        .where(eq("smartphone_id",smartphoneId));
+        .where(eq("smartphone_id",smartphoneId))
+        .orderBy(desc("event_time"));
+    //US07: trier par date
 
     List<Row> results = session.execute(select).all();
 

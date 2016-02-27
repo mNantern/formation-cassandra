@@ -22,9 +22,9 @@ Nous voulons pouvoir filtrer les résultats renvoyés par le service /data en fo
 1. Vérifier que la modélisation choisie permet d'effectuer les requêtes demandées
 2. Modifier le service afin de renvoyer les résultats filtrés
 
-### US07 : Trier les résultats par date et type de données
+### US07 : Trier les résultats par date
 
-Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la plus récente à la plus ancienne ou le contraire) et/ou du type de données.
+Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la plus récente à la plus ancienne au lieu du contraire).
 
 ## Smartphone
 
