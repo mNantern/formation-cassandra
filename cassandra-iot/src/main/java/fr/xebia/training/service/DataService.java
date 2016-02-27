@@ -26,7 +26,7 @@ public class DataService {
 
   public Collection<Data> insertInputData(Collection<InputData> inputDataCollection) {
     List<Data> dataCollection = convertToDataList(inputDataCollection);
-
+    dataRepository.insert(dataCollection);
     return dataCollection;
   }
 

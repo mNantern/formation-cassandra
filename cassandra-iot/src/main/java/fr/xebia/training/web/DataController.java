@@ -1,5 +1,7 @@
 package fr.xebia.training.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +22,8 @@ import fr.xebia.training.service.DataService;
 @RequestMapping("/data")
 public class DataController {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataController.class);
+
   private DataService dataService;
 
   @Autowired
@@ -31,7 +35,7 @@ public class DataController {
   @ResponseStatus(value = HttpStatus.CREATED)
   public Collection<Data> createData(@RequestBody @Valid Collection<InputData> inputData) {
     Collection<Data> data = dataService.insertInputData(inputData);
-    data.stream().forEach(System.out::println);
+    data.stream().forEach(d -> LOGGER.info(d.toString()));
     return data;
   }
 }
