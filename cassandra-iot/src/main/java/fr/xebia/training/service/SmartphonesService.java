@@ -27,10 +27,12 @@ public class SmartphonesService {
   }
 
   public void update(UUID id, Smartphone smartphone) {
+    smartphone.setId(id);
     smartphonesRepository.update(id, smartphone);
   }
 
   public Smartphone create(Smartphone smartphone) {
+    smartphone.setId(UUID.randomUUID());
     return smartphonesRepository.create(smartphone);
   }
 }

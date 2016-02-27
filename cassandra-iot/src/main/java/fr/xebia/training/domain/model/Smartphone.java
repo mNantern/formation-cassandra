@@ -7,14 +7,11 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.UUID;
 
-import javax.validation.constraints.NotNull;
-
 import fr.xebia.training.Application;
 
 @Table(keyspace = Application.KEYSPACE, name = "smartphones")
 public class Smartphone {
 
-  @NotNull
   @PartitionKey
   private UUID id;
 
