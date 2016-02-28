@@ -26,8 +26,10 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 @Repository
 public class DataRepository {
 
+  //US13: add a TTL
   public static final String INSERT_DATA =
-      "INSERT INTO data (id, smartphone_id, event_time, type, value) VALUES (?, ?, ?, ?, ?); ";
+      "INSERT INTO data (id, smartphone_id, event_time, type, value) VALUES (?, ?, ?, ?, ?) "
+      + "USING TTL 7776000;";
   public static final String SELECT_DATA_START_DATE =
       "select * from data WHERE smartphone_id=? AND event_time > ? ORDER BY event_time DESC;";
   public static final String SELECT_DATA_END_DATE =
