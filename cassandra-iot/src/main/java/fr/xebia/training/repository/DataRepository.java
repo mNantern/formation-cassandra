@@ -9,11 +9,11 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import fr.xebia.training.domain.model.Data;
 import fr.xebia.training.domain.model.Type;
@@ -59,11 +59,9 @@ public class DataRepository {
         .from("data")
         .where(eq("smartphone_id",smartphoneId));
 
-    List<Row> results = session.execute(select).all();
-
-    return results.stream()
-        .map(this::rowToData)
-        .collect(Collectors.toList());
+    List<Data> dataList = new ArrayList<>();
+    session.execute(select).forEach(row -> dataList.add(rowToData(row)));
+    return dataList;
   }
 
   private Data rowToData(Row row){
