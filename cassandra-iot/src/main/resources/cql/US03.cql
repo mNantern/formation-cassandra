@@ -11,6 +11,6 @@ CREATE TABLE users (
    firstname text,
    lastname text,
    pass text,
-   smartphones set<text>,
+   smartphones set<uuid>,
    addresses map<text, frozen<address>>
 );

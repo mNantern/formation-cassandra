@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import fr.xebia.training.Application;
 import fr.xebia.training.domain.exceptions.NotFoundException;
@@ -91,7 +92,7 @@ public class UsersRepository {
         .firstname(row.getString("firstname"))
         .lastname(row.getString("lastname"))
         .password(row.getString("pass"))
-        .smartphonesId(row.getSet("smartphones", String.class))
+        .smartphonesId(row.getSet("smartphones", UUID.class))
         .addresses(addresses)
         .build();
   }
