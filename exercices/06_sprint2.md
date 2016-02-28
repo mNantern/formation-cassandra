@@ -34,6 +34,7 @@ Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la 
 2. Ajouter le propriétaire du smartphone lors de la création du smartphone
 3. Lors de la demande de suppression vérifier que le demandeur est bien le propriétaire (en une seule requête, sans faire de READ BEFORE WRITE)
 
+:information_source: Dans le cas où ce n'est pas le propriétaire qui tente de supprimer le smartphone il faut renvoyer une erreur HTTP 403.
 
 ## Utilisateur
 

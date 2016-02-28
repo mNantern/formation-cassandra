@@ -22,8 +22,8 @@ public class SmartphonesService {
     return smartphonesRepository.read(id);
   }
 
-  public void delete(UUID id) {
-    smartphonesRepository.delete(id);
+  public void delete(UUID id, UUID userId) {
+    smartphonesRepository.delete(id, userId);
   }
 
   public void update(UUID id, Smartphone smartphone) {
