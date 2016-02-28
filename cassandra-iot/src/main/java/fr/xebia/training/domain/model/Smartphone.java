@@ -28,6 +28,9 @@ public class Smartphone {
   @NotEmpty
   private String owner;
 
+  //US16: nombre de données
+  private Long dataCount;
+
   public String getOwner() {
     return owner;
   }
@@ -66,5 +69,13 @@ public class Smartphone {
 
   public void setModel(String model) {
     this.model = model;
+  }
+
+  public Long getDataCount() {
+    return dataCount;
+  }
+
+  public void setDataCount(Long dataCount) {
+    this.dataCount = dataCount;
   }
 }

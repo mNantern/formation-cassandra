@@ -38,7 +38,7 @@ Nous voulons pouvoir filtrer notre liste de résultat en fonction du nom constru
 
 ### US16 : Aficher le nombre de données par smartphone
 
-En utilisant une table `number_data_by_devices` avec une donnée de type `COUNTER` renvoyer dans notre service développé lors de l'US14 le nombre de données par smartphone.
+En utilisant une table `number_data_by_smartphones` avec une donnée de type `COUNTER` renvoyez dans notre service développé lors de l'US14 le nombre de données par smartphone.
 
 ## Utilisateur
 

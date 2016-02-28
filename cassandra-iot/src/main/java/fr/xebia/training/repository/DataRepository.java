@@ -47,6 +47,9 @@ public class DataRepository {
       + "ORDER BY event_time DESC "
       + "LIMIT 20;";
   public static final int FETCH_SIZE = 20;
+  public static final String
+      UPDATE_COUNTER =
+      "UPDATE number_data_by_smartphones SET data = data + 1 WHERE smartphone_id= ?;";
 
   private Session session;
 
@@ -54,6 +57,7 @@ public class DataRepository {
   private PreparedStatement selectDataStartDateStmt;
   private PreparedStatement selectDataEndDateStmt;
   private PreparedStatement selectDataStartEndDateStmt;
+  private PreparedStatement updateCounterStmt;
 
   @Autowired
   public DataRepository(Session session) {
@@ -66,6 +70,7 @@ public class DataRepository {
     selectDataStartDateStmt = session.prepare(SELECT_DATA_START_DATE);
     selectDataEndDateStmt = session.prepare(SELECT_DATA_END_DATE);
     selectDataStartEndDateStmt = session.prepare(SELECT_DATA_START_END_DATE);
+    updateCounterStmt = session.prepare(UPDATE_COUNTER);
   }
 
   public void insert(List<Data> dataCollection){
@@ -76,6 +81,8 @@ public class DataRepository {
                                           Date.from(data.getEventTime()),
                                           data.getType().toString(),
                                           data.getValue()));
+      //US15 : compter le nombre de données par smartphone
+      session.execute(updateCounterStmt.bind(data.getSmartphoneId()));
     });
   }
 

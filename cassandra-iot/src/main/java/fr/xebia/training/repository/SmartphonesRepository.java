@@ -3,6 +3,7 @@ package fr.xebia.training.repository;
 import com.datastax.driver.core.PagingState;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Mapper;
@@ -30,6 +31,9 @@ public class SmartphonesRepository {
       "SELECT * FROM smartphones_by_constructor WHERE constructor = ?;";
   public static final String INSERT_SMARTPHONES_BY_CONSTRUCTOR =
       "INSERT INTO smartphones_by_constructor (id, name, constructor, model, owner) VALUES (?, ?, ?, ?, ?)";
+  public static final String
+      READ_SMARTPHONE_COUNTER =
+      "SELECT data FROM number_data_by_smartphones WHERE smartphone_id = ?;";
   private Session session;
 
   private Mapper<Smartphone> mapper;
@@ -38,6 +42,7 @@ public class SmartphonesRepository {
   private PreparedStatement readAllSmartphoneStmt;
   private PreparedStatement readByConstructorStmt;
   private PreparedStatement saveByConstructorStmt;
+  private PreparedStatement readCounterStmt;
 
   @Autowired
   public SmartphonesRepository(Session session) {
@@ -51,6 +56,7 @@ public class SmartphonesRepository {
     readAllSmartphoneStmt = session.prepare(SELECT_ALL);
     readByConstructorStmt = session.prepare(SELECT_BY_CONSTRUCTOR);
     saveByConstructorStmt = session.prepare(INSERT_SMARTPHONES_BY_CONSTRUCTOR);
+    readCounterStmt = session.prepare(READ_SMARTPHONE_COUNTER);
   }
 
   public Smartphone read(UUID id) {
@@ -105,6 +111,11 @@ public class SmartphonesRepository {
     List<Smartphone> output = new ArrayList<>();
     for (int i = 0; i < nbrResult; i++) {
       Smartphone smartphone = mapper.map(results).one();
+      //US16: ajout de compteurs
+      Row counter = session.execute(readCounterStmt.bind(smartphone.getId())).one();
+      if(counter != null) {
+        smartphone.setDataCount(counter.getLong("data"));
+      }
       output.add(smartphone);
     }
 
