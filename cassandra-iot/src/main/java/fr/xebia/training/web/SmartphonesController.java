@@ -40,7 +40,7 @@ public class SmartphonesController {
 
   @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
   public void deleteUser(@PathVariable UUID id,
-                         @RequestParam UUID userId) {
+                         @RequestParam String userId) {
     smartphoneService.delete(id,userId);
   }
 

@@ -7,22 +7,26 @@ import java.util.UUID;
 
 import fr.xebia.training.domain.model.Smartphone;
 import fr.xebia.training.repository.SmartphonesRepository;
+import fr.xebia.training.repository.UsersRepository;
 
 @Service
 public class SmartphonesService {
 
   private SmartphonesRepository smartphonesRepository;
+  private UsersRepository usersRepository;
 
   @Autowired
-  public SmartphonesService(SmartphonesRepository smartphonesRepository) {
+  public SmartphonesService(SmartphonesRepository smartphonesRepository,
+                            UsersRepository usersRepository) {
     this.smartphonesRepository = smartphonesRepository;
+    this.usersRepository = usersRepository;
   }
 
   public Smartphone read(UUID id) {
     return smartphonesRepository.read(id);
   }
 
-  public void delete(UUID id, UUID userId) {
+  public void delete(UUID id, String userId) {
     smartphonesRepository.delete(id, userId);
   }
 
@@ -33,6 +37,9 @@ public class SmartphonesService {
 
   public Smartphone create(Smartphone smartphone) {
     smartphone.setId(UUID.randomUUID());
-    return smartphonesRepository.create(smartphone);
+    smartphonesRepository.create(smartphone);
+    //US09 : ajouter le smartphone créé dans l'utilisateur correspondant
+    usersRepository.addSmartphone(smartphone.getOwner(), smartphone.getId());
+    return smartphone;
   }
 }

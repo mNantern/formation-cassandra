@@ -44,6 +44,8 @@ Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la 
 
 Lors de la création d'un smartphone il est nécessaire de l'ajouter à l'utilisateur sans quoi le smartphone ne pourra pas être consulté depuis la page utilisateur.
 
+:warning:  Que faire quand l'ajout d'un smartphone échoue ou que l'utilisateur n'existe pas ?
+
 ### US10 : Création concurrente d'utilisateur
 
 Un problème est arrivé en production: deux utilisateurs ont choisit le même username (adresse email) au même moment. Le premier a perdu son compte sans aucune erreur.

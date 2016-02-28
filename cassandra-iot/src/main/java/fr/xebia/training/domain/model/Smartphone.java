@@ -25,13 +25,14 @@ public class Smartphone {
   private String model;
 
   // US08 : ajout d'une colonne owner
-  private UUID owner;
+  @NotEmpty
+  private String owner;
 
-  public UUID getOwner() {
+  public String getOwner() {
     return owner;
   }
 
-  public void setOwner(UUID owner) {
+  public void setOwner(String owner) {
     this.owner = owner;
   }
 

@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import fr.xebia.training.Application;
 import fr.xebia.training.domain.exceptions.NotFoundException;
@@ -28,6 +31,8 @@ public class UsersRepository {
   public static final String UPDATE_USER =
       "UPDATE users SET firstname = ?, lastname = ?, pass = ?, smartphones = ?, addresses = ? "
       + "WHERE username = ?;";
+  public static final String ADD_SMARTPHONE =
+      "UPDATE users SET smartphones = smartphones + ? WHERE username = ?;";
 
   private Session session;
 
@@ -35,6 +40,7 @@ public class UsersRepository {
   private PreparedStatement selectUserStmt;
   private PreparedStatement deleteUserStmt;
   private PreparedStatement updateUserStmt;
+  private PreparedStatement addSmartphoneStmt;
 
   @Autowired
   public UsersRepository(Session session) {
@@ -47,6 +53,7 @@ public class UsersRepository {
     selectUserStmt = session.prepare(SELECT_USER);
     deleteUserStmt = session.prepare(DELETE_USER);
     updateUserStmt = session.prepare(UPDATE_USER);
+    addSmartphoneStmt = session.prepare(ADD_SMARTPHONE);
   }
 
   public User insert(User user) {
@@ -91,7 +98,7 @@ public class UsersRepository {
         .firstname(row.getString("firstname"))
         .lastname(row.getString("lastname"))
         .password(row.getString("pass"))
-        .smartphonesId(row.getSet("smartphones", String.class))
+        .smartphonesId(row.getSet("smartphones", UUID.class))
         .addresses(addresses)
         .build();
   }
@@ -122,5 +129,12 @@ public class UsersRepository {
                                         user.getSmartphonesId(),
                                         userToUDTValueMap(user),
                                         username));
+  }
+
+  public void addSmartphone(String owner, UUID id) {
+    //US09 : ajout d'un smartphone à l'utilisateur
+    Set<UUID> toAdd = new HashSet<>();
+    toAdd.add(id);
+    session.execute(addSmartphoneStmt.bind(toAdd, owner));
   }
 }

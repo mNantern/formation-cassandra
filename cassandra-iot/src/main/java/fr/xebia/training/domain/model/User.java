@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class User {
 
@@ -21,7 +22,7 @@ public class User {
   @NotEmpty
   private String password;
 
-  private Set<String> smartphonesId;
+  private Set<UUID> smartphonesId;
 
   @NotEmpty
   private Map<String,Address> addresses;
@@ -58,11 +59,11 @@ public class User {
     this.password = password;
   }
 
-  public Set<String> getSmartphonesId() {
+  public Set<UUID> getSmartphonesId() {
     return smartphonesId;
   }
 
-  public void setSmartphonesId(Set<String> smartphonesId) {
+  public void setSmartphonesId(Set<UUID> smartphonesId) {
     this.smartphonesId = smartphonesId;
   }
 
@@ -111,7 +112,7 @@ public class User {
       return this;
     }
 
-    public Builder smartphonesId(Set<String> smartphonesId){
+    public Builder smartphonesId(Set<UUID> smartphonesId){
       tmp.smartphonesId = smartphonesId;
       return this;
     }

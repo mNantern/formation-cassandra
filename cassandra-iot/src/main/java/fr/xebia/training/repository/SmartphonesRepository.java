@@ -40,7 +40,7 @@ public class SmartphonesRepository {
     return mapper.get(id);
   }
 
-  public void delete(UUID id, UUID userId) {
+  public void delete(UUID id, String userId) {
     // US04: suppression d'un smartphone
     // US08: seul le propriétaire peut supprimer le smartphone
     ResultSet result = session.execute(deleteSmartphoneStmt.bind(id, userId));
