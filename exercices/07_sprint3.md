@@ -36,11 +36,7 @@ Pour réaliser cet écran il faut renvoyer de manière paginée les données ass
 
 Nous voulons pouvoir filtrer notre liste de résultat en fonction du nom constructeur.
 
-### US16 : Pouvoir effectuer une recherche par nom de modèle
-
-De même il faut pouvoir filtrer la liste en fonction du nom du modèle.
-
-### US17 : Aficher le nombre de données par smartphone
+### US16 : Aficher le nombre de données par smartphone
 
 En utilisant une table `number_data_by_devices` avec une donnée de type `COUNTER` renvoyer dans notre service développé lors de l'US14 le nombre de données par smartphone.
 
@@ -48,7 +44,7 @@ En utilisant une table `number_data_by_devices` avec une donnée de type `COUNTE
 
 ![User detais v3](https://raw.githubusercontent.com/mNantern/formation-cassandra/master/exercices/data/media/user3.png)
 
-### US18 : Supprimer un smartphone
+### US17 : Supprimer un smartphone
 
 Il faut pouvoir donner la possibilité à l'utilisateur de supprimer un de ses smartphones.
 A la suppression du smartphone il est nécessaire de:

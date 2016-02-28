@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -61,4 +62,8 @@ public class SmartphonesController {
     return smartphoneService.readAll(pagingState);
   }
 
+  @RequestMapping(value={"/",""}, method= RequestMethod.GET, params = {"constructor"})
+  public List<Smartphone> getByConstructor(@RequestParam String constructor) {
+    return smartphoneService.readByConstructor(constructor);
+  }
 }
