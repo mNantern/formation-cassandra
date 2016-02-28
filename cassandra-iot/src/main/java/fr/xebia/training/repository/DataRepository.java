@@ -112,8 +112,13 @@ public class DataRepository {
       Row row = results.one();
       output.add(rowToData(row));
     }
-    String savedState = results.getExecutionInfo().getPagingState().toString();
-    return new ResultPage<>(output, savedState);
+
+    PagingState pagingState = results.getExecutionInfo().getPagingState();
+    if(pagingState != null){
+      return new ResultPage<>(output, pagingState.toString());
+    } else {
+      return new ResultPage<>(output, null);
+    }
   }
 
   private Data rowToData(Row row){

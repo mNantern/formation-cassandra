@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
 
 import fr.xebia.training.domain.exceptions.NotFoundException;
+import fr.xebia.training.domain.model.ResultPage;
 import fr.xebia.training.domain.model.Smartphone;
 import fr.xebia.training.service.SmartphonesService;
 
@@ -57,8 +57,8 @@ public class SmartphonesController {
   }
 
   @RequestMapping(value={"/",""}, method= RequestMethod.GET)
-  public List<Smartphone> getAll() {
-    return smartphoneService.readAll();
+  public ResultPage<Smartphone> getAll(@RequestParam(required = false) String pagingState) {
+    return smartphoneService.readAll(pagingState);
   }
 
 }

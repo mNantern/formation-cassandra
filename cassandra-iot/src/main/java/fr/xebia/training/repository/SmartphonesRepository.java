@@ -1,18 +1,22 @@
 package fr.xebia.training.repository;
 
+import com.datastax.driver.core.PagingState;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import fr.xebia.training.domain.exceptions.ForbiddenException;
+import fr.xebia.training.domain.model.ResultPage;
 import fr.xebia.training.domain.model.Smartphone;
 
 @Repository
@@ -20,6 +24,7 @@ public class SmartphonesRepository {
 
   public static final String DELETE_SMARTPHONE = "DELETE FROM smartphones WHERE id=? IF owner=?;";
   public static final String SELECT_ALL = "SELECT * FROM smartphones;";
+  private static final int FETCH_SIZE = 20;
   private Session session;
 
   private Mapper<Smartphone> mapper;
@@ -64,7 +69,29 @@ public class SmartphonesRepository {
     return smartphone;
   }
 
-  public List<Smartphone> readAll() {
-    return null;
+  public ResultPage<Smartphone> readAll(String pagingState) {
+    //US14: lister de manière paginée l'ensemble des smartphones
+    Statement statement = readAllSmartphoneStmt
+        .bind()
+        .setFetchSize(FETCH_SIZE);
+
+    if( pagingState != null){
+      statement.setPagingState(PagingState.fromString(pagingState));
+    }
+
+    ResultSet results = session.execute(statement);
+    int nbrResult = results.getAvailableWithoutFetching();
+    List<Smartphone> output = new ArrayList<>();
+    for (int i = 0; i < nbrResult; i++) {
+      Smartphone smartphone = mapper.map(results).one();
+      output.add(smartphone);
+    }
+
+    PagingState nextPagingState = results.getExecutionInfo().getPagingState();
+    if(nextPagingState != null){
+      return new ResultPage<>(output, nextPagingState.toString());
+    } else {
+      return new ResultPage<>(output, null);
+    }
   }
 }

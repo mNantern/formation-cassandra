@@ -3,9 +3,9 @@ package fr.xebia.training.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
+import fr.xebia.training.domain.model.ResultPage;
 import fr.xebia.training.domain.model.Smartphone;
 import fr.xebia.training.repository.SmartphonesRepository;
 import fr.xebia.training.repository.UsersRepository;
@@ -44,7 +44,7 @@ public class SmartphonesService {
     return smartphone;
   }
 
-  public List<Smartphone> readAll() {
-    return smartphonesRepository.readAll();
+  public ResultPage<Smartphone> readAll(String pagingState) {
+    return smartphonesRepository.readAll(pagingState);
   }
 }
