@@ -13,6 +13,7 @@ import fr.xebia.extras.selma.Selma;
 import fr.xebia.training.domain.mapping.InputDataMapper;
 import fr.xebia.training.domain.model.Data;
 import fr.xebia.training.domain.model.InputData;
+import fr.xebia.training.domain.model.ResultPage;
 import fr.xebia.training.repository.DataRepository;
 
 @Service
@@ -42,19 +43,23 @@ public class DataService {
         .collect(Collectors.toList());
   }
 
-  public Collection<Data> getData(UUID smartphoneId, Instant startDate, Instant endDate) {
+  public ResultPage<Data> getData(UUID smartphoneId, Instant startDate, Instant endDate,
+                                  String pagingState) {
     boolean startDateNull = (startDate == null);
     boolean endDateNull = (endDate == null);
     boolean allNull = startDateNull && endDateNull;
 
     if(allNull){
-      return dataRepository.getBySmartphoneId(smartphoneId);
+      return dataRepository.getBySmartphoneId(smartphoneId, pagingState);
     } else if(startDateNull){
-      return dataRepository.getBySmartphoneIdEndDate(smartphoneId, endDate);
+      return dataRepository.getBySmartphoneIdEndDate(smartphoneId, endDate, pagingState);
     } else if (endDateNull) {
-      return dataRepository.getBySmartphoneIdStartDate(smartphoneId, startDate);
+      return dataRepository.getBySmartphoneIdStartDate(smartphoneId, startDate, pagingState);
     } else {
-      return dataRepository.getBySmartphoneIdStartEndDate(smartphoneId, startDate, endDate);
+      return dataRepository.getBySmartphoneIdStartEndDate(smartphoneId,
+                                                          startDate,
+                                                          endDate,
+                                                          pagingState);
     }
 
   }

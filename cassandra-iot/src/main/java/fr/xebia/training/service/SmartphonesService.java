@@ -3,6 +3,7 @@ package fr.xebia.training.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 import fr.xebia.training.domain.model.Smartphone;
@@ -41,5 +42,9 @@ public class SmartphonesService {
     //US09 : ajouter le smartphone créé dans l'utilisateur correspondant
     usersRepository.addSmartphone(smartphone.getOwner(), smartphone.getId(), smartphone.getName());
     return smartphone;
+  }
+
+  public List<Smartphone> readAll() {
+    return smartphonesRepository.readAll();
   }
 }

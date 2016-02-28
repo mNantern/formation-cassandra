@@ -9,6 +9,7 @@ import com.datastax.driver.mapping.MappingManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import fr.xebia.training.domain.exceptions.ForbiddenException;
@@ -18,11 +19,13 @@ import fr.xebia.training.domain.model.Smartphone;
 public class SmartphonesRepository {
 
   public static final String DELETE_SMARTPHONE = "DELETE FROM smartphones WHERE id=? IF owner=?;";
+  public static final String SELECT_ALL = "SELECT * FROM smartphones;";
   private Session session;
 
   private Mapper<Smartphone> mapper;
 
   private PreparedStatement deleteSmartphoneStmt;
+  private PreparedStatement readAllSmartphoneStmt;
 
   @Autowired
   public SmartphonesRepository(Session session) {
@@ -33,6 +36,7 @@ public class SmartphonesRepository {
 
   private void prepareStatements() {
     deleteSmartphoneStmt = session.prepare(DELETE_SMARTPHONE);
+    readAllSmartphoneStmt = session.prepare(SELECT_ALL);
   }
 
   public Smartphone read(UUID id) {
@@ -58,5 +62,9 @@ public class SmartphonesRepository {
     // US04: insertion d'un smartphone
     mapper.save(smartphone);
     return smartphone;
+  }
+
+  public List<Smartphone> readAll() {
+    return null;
   }
 }

@@ -1,5 +1,6 @@
 package fr.xebia.training.repository;
 
+import com.datastax.driver.core.PagingState;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -12,12 +13,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import fr.xebia.training.domain.model.Data;
+import fr.xebia.training.domain.model.ResultPage;
 import fr.xebia.training.domain.model.Type;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.desc;
@@ -31,13 +32,21 @@ public class DataRepository {
       "INSERT INTO data (id, smartphone_id, event_time, type, value) VALUES (?, ?, ?, ?, ?) "
       + "USING TTL 7776000;";
   public static final String SELECT_DATA_START_DATE =
-      "select * from data WHERE smartphone_id=? AND event_time > ? ORDER BY event_time DESC;";
+      "select * from data "
+      + "WHERE smartphone_id=? AND event_time > ? "
+      + "ORDER BY event_time DESC "
+      + "LIMIT 20;";
   public static final String SELECT_DATA_END_DATE =
-      "select * from data WHERE smartphone_id=? AND event_time <= ? ORDER BY event_time DESC;";
+      "select * from data "
+      + "WHERE smartphone_id=? AND event_time <= ? "
+      + "ORDER BY event_time DESC "
+      + "LIMIT 20;";
   public static final String SELECT_DATA_START_END_DATE =
       "select * from data "
       + "WHERE smartphone_id=? AND event_time > ? AND event_time <= ? "
-      + "ORDER BY event_time DESC;";
+      + "ORDER BY event_time DESC "
+      + "LIMIT 20;";
+  public static final int FETCH_SIZE = 20;
 
   private Session session;
 
@@ -70,23 +79,41 @@ public class DataRepository {
     });
   }
 
-  public Collection<Data> getBySmartphoneId(UUID smartphoneId) {
+  public ResultPage<Data> getBySmartphoneId(UUID smartphoneId, String pagingState) {
     // US02: récupérer l'ensemble des données liées à un smartphone
     Statement select = QueryBuilder
         .select()
         .all()
         .from("data")
         .where(eq("smartphone_id",smartphoneId))
-        .orderBy(desc("event_time"));
+        .orderBy(desc("event_time"))
+        .setFetchSize(FETCH_SIZE)
+        .setPagingState(getPagingState(pagingState));
     //US07: trier par date
+    //US12: paginer les résultats
 
     return getCollectionFromResultSet(session.execute(select));
   }
 
-  private List<Data> getCollectionFromResultSet(ResultSet results) {
+  private PagingState getPagingState(String pagingState) {
+    PagingState ps;
+    if(pagingState == null){
+      ps = null;
+    } else {
+      ps = PagingState.fromString(pagingState);
+    }
+    return ps;
+  }
+
+  private ResultPage<Data> getCollectionFromResultSet(ResultSet results) {
+    int nbrResult = results.getAvailableWithoutFetching();
     List<Data> output = new ArrayList<>();
-    results.forEach(row -> output.add(rowToData(row)));
-    return output;
+    for (int i = 0; i < nbrResult; i++) {
+      Row row = results.one();
+      output.add(rowToData(row));
+    }
+    String savedState = results.getExecutionInfo().getPagingState().toString();
+    return new ResultPage<>(output, savedState);
   }
 
   private Data rowToData(Row row){
@@ -99,26 +126,39 @@ public class DataRepository {
         .build();
   }
 
-  public Collection<Data> getBySmartphoneIdStartDate(UUID smartphoneId, Instant startDate) {
+  public ResultPage<Data> getBySmartphoneIdStartDate(UUID smartphoneId, Instant startDate,
+                                                     String pagingState) {
     //US06 : recherche avec date début
-    ResultSet results = session.execute(selectDataStartDateStmt.bind(smartphoneId,
-                                                                     Date.from(startDate)));
-    return getCollectionFromResultSet(results);
+    //US12: paginer les résultats
+    Statement statement = selectDataStartDateStmt
+        .bind(smartphoneId, Date.from(startDate))
+        .setFetchSize(FETCH_SIZE)
+        .setPagingState(getPagingState(pagingState));
+
+    return getCollectionFromResultSet(session.execute(statement));
   }
 
-  public Collection<Data> getBySmartphoneIdEndDate(UUID smartphoneId, Instant endDate) {
+  public ResultPage<Data> getBySmartphoneIdEndDate(UUID smartphoneId, Instant endDate,
+                                                   String pagingState) {
     //US06 : recherche avec date de fin
-    ResultSet results = session.execute(selectDataEndDateStmt.bind(smartphoneId,
-                                                                   Date.from(endDate)));
-    return getCollectionFromResultSet(results);
+    //US12: paginer les résultats
+    Statement statement = selectDataEndDateStmt
+        .bind(smartphoneId, Date.from(endDate))
+        .setFetchSize(FETCH_SIZE)
+        .setPagingState(getPagingState(pagingState));
+
+    return getCollectionFromResultSet(session.execute(statement));
   }
 
-  public Collection<Data> getBySmartphoneIdStartEndDate(UUID smartphoneId, Instant startDate,
-                                                        Instant endDate) {
+  public ResultPage<Data> getBySmartphoneIdStartEndDate(UUID smartphoneId, Instant startDate,
+                                                        Instant endDate, String pagingState) {
     //US06 : recherche avec date début + dateFin
-    ResultSet results = session.execute(selectDataStartEndDateStmt.bind(smartphoneId,
-                                                                        Date.from(startDate),
-                                                                        Date.from(endDate)));
-    return getCollectionFromResultSet(results);
+    //US12: paginer les résultats
+    Statement statement = selectDataStartEndDateStmt
+        .bind(smartphoneId, Date.from(startDate), Date.from(endDate))
+        .setFetchSize(FETCH_SIZE)
+        .setPagingState(getPagingState(pagingState));
+
+    return getCollectionFromResultSet(session.execute(statement));
   }
 }

@@ -19,6 +19,7 @@ import javax.validation.Valid;
 
 import fr.xebia.training.domain.model.Data;
 import fr.xebia.training.domain.model.InputData;
+import fr.xebia.training.domain.model.ResultPage;
 import fr.xebia.training.service.DataService;
 
 @RestController
@@ -43,10 +44,11 @@ public class DataController {
   }
 
   @RequestMapping(value={"/", ""}, method= RequestMethod.GET)
-  public Collection<Data> getData(@RequestParam UUID smartphoneId,
+  public ResultPage<Data> getData(@RequestParam UUID smartphoneId,
                                   @RequestParam(required = false) Instant startDate,
-                                  @RequestParam(required = false) Instant endDate){
-    return dataService.getData(smartphoneId, startDate, endDate);
+                                  @RequestParam(required = false) Instant endDate,
+                                  @RequestParam(required = false) String pagingState){
+    return dataService.getData(smartphoneId, startDate, endDate, pagingState);
   }
 
 }

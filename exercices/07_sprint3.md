@@ -6,7 +6,9 @@
 
 ### US12 : Paginer les données
 
-Nos smartphones remontant des données toutes les secondes, la page web met beaucoup de temps à se charger. Il faudrait paginer les données et offrir dans notre réponse les champs `previousUrl` et `nextUrl`.
+Nos smartphones remontant des données toutes les secondes, la page web met beaucoup de temps à se charger. Il faudrait limiter le nombre de données par page à 20 et offrir dans notre réponse le champ `pagingState`.
+
+Si le client a besoin de la page suivante il pourra l'obtenir en ajoutant ce champ en paramètre de l'url.
 
 Afin de paginer les données nous allons utiliser un [PagingState](http://docs.datastax.com/en/drivers/java/3.0/index.html)
 
