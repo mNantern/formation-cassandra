@@ -39,7 +39,7 @@ public class SmartphonesService {
     smartphone.setId(UUID.randomUUID());
     smartphonesRepository.create(smartphone);
     //US09 : ajouter le smartphone créé dans l'utilisateur correspondant
-    usersRepository.addSmartphone(smartphone.getOwner(), smartphone.getId());
+    usersRepository.addSmartphone(smartphone.getOwner(), smartphone.getId(), smartphone.getName());
     return smartphone;
   }
 }
