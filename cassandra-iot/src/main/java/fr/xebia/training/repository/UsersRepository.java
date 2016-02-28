@@ -1,6 +1,7 @@
 package fr.xebia.training.repository;
 
 import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.UDTValue;
@@ -16,6 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import fr.xebia.training.Application;
+import fr.xebia.training.domain.exceptions.ConflictException;
 import fr.xebia.training.domain.exceptions.NotFoundException;
 import fr.xebia.training.domain.model.Address;
 import fr.xebia.training.domain.model.User;
@@ -25,7 +27,7 @@ public class UsersRepository {
 
   public static final String INSERT_USER =
       "INSERT INTO users (username, firstname, lastname, pass, smartphones, addresses) "
-      + "VALUES (?, ?, ?, ?, ?, ?);";
+      + "VALUES (?, ?, ?, ?, ?, ?) IF NOT EXISTS;";
   public static final String SELECT_USER = "SELECT * FROM users WHERE username=?;";
   public static final String DELETE_USER = "DELETE FROM users WHERE username=?;";
   public static final String UPDATE_USER =
@@ -58,12 +60,17 @@ public class UsersRepository {
 
   public User insert(User user) {
     // US03: insertion d'un utilisateur
-    session.execute(insertUserStmt.bind(user.getUsername(),
-                                        user.getFirstname(),
-                                        user.getLastname(),
-                                        user.getPassword(),
-                                        user.getSmartphonesId(),
-                                        userToUDTValueMap(user)));
+    ResultSet result = session.execute(insertUserStmt.bind(user.getUsername(),
+                                                           user.getFirstname(),
+                                                           user.getLastname(),
+                                                           user.getPassword(),
+                                                           user.getSmartphonesId(),
+                                                           userToUDTValueMap(user)));
+    //US10 : interdire la création d'un utilisateur si celui-ci existe déjà
+    if(!result.wasApplied()){
+      throw new ConflictException();
+    }
+
     return user;
   }
 
