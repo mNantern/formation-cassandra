@@ -1,6 +1,7 @@
 package fr.xebia.training.repository;
 
 import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
@@ -10,11 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import fr.xebia.training.domain.model.Data;
 import fr.xebia.training.domain.model.Type;
@@ -77,15 +78,13 @@ public class DataRepository {
         .orderBy(desc("event_time"));
     //US07: trier par date
 
-    List<Row> results = session.execute(select).all();
-
-    return getCollectionFromRows(results);
+    return getCollectionFromResultSet(session.execute(select));
   }
 
-  private List<Data> getCollectionFromRows(List<Row> results) {
-    return results.stream()
-        .map(this::rowToData)
-        .collect(Collectors.toList());
+  private List<Data> getCollectionFromResultSet(ResultSet results) {
+    List<Data> output = new ArrayList<>();
+    results.forEach(row -> output.add(rowToData(row)));
+    return output;
   }
 
   private Data rowToData(Row row){
@@ -100,24 +99,24 @@ public class DataRepository {
 
   public Collection<Data> getBySmartphoneIdStartDate(UUID smartphoneId, Instant startDate) {
     //US06 : recherche avec date début
-    List<Row> results =
-        session.execute(selectDataStartDateStmt.bind(smartphoneId, Date.from(startDate))).all();
-    return getCollectionFromRows(results);
+    ResultSet results = session.execute(selectDataStartDateStmt.bind(smartphoneId,
+                                                                     Date.from(startDate)));
+    return getCollectionFromResultSet(results);
   }
 
   public Collection<Data> getBySmartphoneIdEndDate(UUID smartphoneId, Instant endDate) {
     //US06 : recherche avec date de fin
-    List<Row> results =
-        session.execute(selectDataEndDateStmt.bind(smartphoneId, Date.from(endDate))).all();
-    return getCollectionFromRows(results);
+    ResultSet results = session.execute(selectDataEndDateStmt.bind(smartphoneId,
+                                                                   Date.from(endDate)));
+    return getCollectionFromResultSet(results);
   }
 
   public Collection<Data> getBySmartphoneIdStartEndDate(UUID smartphoneId, Instant startDate,
                                                         Instant endDate) {
     //US06 : recherche avec date début + dateFin
-    List<Row> results = session.execute(
-            selectDataStartEndDateStmt.bind(smartphoneId, Date.from(startDate), Date.from(endDate)))
-            .all();
-    return getCollectionFromRows(results);
+    ResultSet results = session.execute(selectDataStartEndDateStmt.bind(smartphoneId,
+                                                                        Date.from(startDate),
+                                                                        Date.from(endDate)));
+    return getCollectionFromResultSet(results);
   }
 }
