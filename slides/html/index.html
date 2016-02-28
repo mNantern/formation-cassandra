@@ -608,6 +608,29 @@ CREATE TABLE users (
 					</section>
 
 					<section>
+						<h3>Recherche dans Cassandra</h3>
+						<ul>
+							<li>Clairement la recherche sur autre chose que la clé primaire est compliquée dans Cassandra.</li>
+							<li>Cassandra a pour but de stocker beaucoup de données et de les restituer rapidement. Si l'on veut en plus faire des recherches efficaces il existe quelques possibilités:
+								<ul>
+									<li>
+										<span class='highlight'>Stratio:</span> un plugin pour Cassandra qui remplace le fonctionnement des index secondaires en utilisant des index Lucene
+									</li>
+									<li>
+										<span class='highlight'>SASI:</span> un index secondaire alternatif qui devrait sortir avec Cassandra 3.4 et qui permet des requêtes bien plus évoluées
+									</li>
+									<li>
+										<span class='highlight'>Datastax Enterprise:</span> le produit commercial de Datastax qui intègre lucene sur la même JVM que Cassandra
+									</li>
+								</ul>
+							</li>
+						</ul>
+						<p>
+							<span class='highlight'>Le plus simple est d'oublier les index secondaires.</span>
+						</p>
+					</section>
+
+					<section>
 						<h3>Insérer des données</h3>
 					</section>
 
@@ -1209,7 +1232,7 @@ SELECT * FROM user_by_email;
 								<span class='highlight'>US6:</span> Permettre d'afficher les données d'une date précise.
 							</li>
 							<li>
-								<span class='highlight'>US7:</span> Trier les données en fonction de la date et/ou du type.
+								<span class='highlight'>US7:</span> Trier les données en fonction de la date.
 							</li>
 							<li>
 								<span class='highlight'>US8:</span> Seul le propriétaire du smartphone doit pouvoir le supprimer.
@@ -1258,16 +1281,10 @@ SELECT * FROM user_by_email;
 								<span class='highlight'>US14:</span> Administration des smartphones: lister l'ensemble des smartphones de manière paginée.
 							</li>
 							<li>
-								<span class='highlight'>US15:</span> Rechercher les smartphones par nom de modèle.
+								<span class='highlight'>US15:</span> Rechercher les smartphones par nom de constructeur.
 							</li>
 							<li>
-								<span class='highlight'>US16:</span> Rechercher les smartphones par nom de constructeur.
-							</li>
-							<li>
-								<span class='highlight'>US17:</span> Afficher un compteur du nombre de données remontées pour chaque smartphone.
-							</li>
-							<li>
-								<span class='highlight'>US18:</span> Permettre la suppression d'un smartphone depuis la page utilisateur.
+								<span class='highlight'>US16:</span> Afficher un compteur du nombre de données remontées pour chaque smartphone.
 							</li>
 						</ol>
 					</section>
@@ -1275,10 +1292,10 @@ SELECT * FROM user_by_email;
 						<h3>Homework !</h3>
 						<ol>
 							<li>
-								<span class='highlight'>US19:</span> Partitionner les données des smartphones à la journée tout en conservant la recherche sur une plage de date et la pagination.
+								<span class='highlight'>US17:</span> Permettre à l'utilisateur de supprimer un smartphone.
 							</li>
 							<li>
-								<span class='highlight'>US20:</span> Faire une recherche de smartphone en fonction du nom du constructeur et du nom du modèle.
+								<span class='highlight'>US18:</span> Partitionner les données des smartphones à la journée tout en conservant la recherche sur une plage de date et la pagination.
 							</li>
 						</ol>
 					</section>
@@ -1289,17 +1306,59 @@ SELECT * FROM user_by_email;
 						<h1>Préparer Cassandra pour la production</h1>
 					</section>
 					<section>
-						<h3>Stratégies de réplication</h3>
-						<p>SimpleStrategy, NetworkTopologyStrategie</p>
+						<h3>Anti-Pattern</h3>
+						<p>Autant Cassandra peut être très rapide autant il faut faire attention à certains anti-pattern qui vont impacter la performance:</p>
+						<ul>
+							<li>Utiliser un stockage réseau (SAN, NAS ou NFS)</li>
+							<li>Allouer trop de mémoire à la JVM</li>
+							<li>Read before Write</li>
+							<li>SELECT .. IN ou BATCH</li>
+						</ul>
 					</section>
 					<section>
-						<h3>Stratégies de compaction</h3>
+						<h3>Options recommandées (Linux)</h3>
+						<ul>
+							<li>Synchroniser les machines du cluster (NTP)</li>
+							<li>Désactiver le swap</li>
+							<li>
+								ulimit:
+								<ul>
+									<li>nproc: 32768</li>
+									<li>nofile: 100000</li>
+									<li>memlock: unlimited</li>
+									<li>as: unlimited</li>
+								</ul>
+							</li>
+						</ul>
 					</section>
 					<section>
-						<h3>Query Tracing</h3>
+						<h3>Choisir son matériel</h3>
+						<ul>
+							<li><span class='highlight'>Mémoire:</span> de 16 à 64Go (minimum: 8Go)</li>
+							<li><span class='highlight'>CPU:</span> 4 à 8 core</li>
+							<li><span class='highlight'>Disques:</span> dans l'idéal des SSD. Dans tous les cas penser à séparer les commit logs des SSTables sur des disques différents</li>
+							<li><span class='highlight'>Tailles des disques:</span> le commit log nécessite peu d'espace, pour les SSTables prévoir entre 500 Go et 1 To par noeud.</li>
+							<li><span class='highlight'>Réseau:</span> 2 cartes réseaux à 1 Gbit/s (une pour la communication entre les noeuds, l'autre pour la communication avec les clients)</li>
+						</ul>
 					</section>
 					<section>
-						<h3>Authentification et Autorisation</h3>
+						<h3>Choisir sa compaction</h3>
+						<ul>
+							<li><span class='highlight'>SizeTieredCompactionStrategy(STCS):</span> recommandé pour les workloads write-intensive</li>
+							<li><span class='highlight'>LeveledCompactionStrategy(LCS):</span> recommandé pour les workloads read-intensive</li>
+							<li><span class='highlight'>DateTieredCompactionStrategy(DTCS):</span> recommandé pour les timeseries et les TTL</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Sécurité</h3>
+						<p>
+							Plusieurs mécanismes de sécurité sont disponibles au sein de Cassandra:
+						</p>
+						<ul>
+							<li><span class='highlight'>Client-to-node encryption:</span> communication via SSL entre les clients et les noeuds C*</li>
+							<li><span class='highlight'>Node-to-node encryption:</span> communication via SSL entre les noeuds du cluster</li>
+							<li><span class='highlight'>Role Based Access Control (RBAC)</span></li>
+						</ul>
 					</section>
 				</section>
 

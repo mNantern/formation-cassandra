@@ -34,21 +34,17 @@ public class DataRepository {
   public static final String SELECT_DATA_START_DATE =
       "select * from data "
       + "WHERE smartphone_id=? AND event_time > ? "
-      + "ORDER BY event_time DESC "
-      + "LIMIT 20;";
+      + "ORDER BY event_time DESC;";
   public static final String SELECT_DATA_END_DATE =
       "select * from data "
       + "WHERE smartphone_id=? AND event_time <= ? "
-      + "ORDER BY event_time DESC "
-      + "LIMIT 20;";
+      + "ORDER BY event_time DESC;";
   public static final String SELECT_DATA_START_END_DATE =
       "select * from data "
       + "WHERE smartphone_id=? AND event_time > ? AND event_time <= ? "
-      + "ORDER BY event_time DESC "
-      + "LIMIT 20;";
+      + "ORDER BY event_time DESC;";
   public static final int FETCH_SIZE = 20;
-  public static final String
-      UPDATE_COUNTER =
+  public static final String UPDATE_COUNTER =
       "UPDATE number_data_by_smartphones SET data = data + 1 WHERE smartphone_id= ?;";
 
   private Session session;

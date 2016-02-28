@@ -39,19 +39,3 @@ Nous voulons pouvoir filtrer notre liste de résultat en fonction du nom constru
 ### US16 : Aficher le nombre de données par smartphone
 
 En utilisant une table `number_data_by_smartphones` avec une donnée de type `COUNTER` renvoyez dans notre service développé lors de l'US14 le nombre de données par smartphone.
-
-## Utilisateur
-
-![User detais v3](https://raw.githubusercontent.com/mNantern/formation-cassandra/master/exercices/data/media/user3.png)
-
-### US17 : Supprimer un smartphone
-
-Il faut pouvoir donner la possibilité à l'utilisateur de supprimer un de ses smartphones.
-A la suppression du smartphone il est nécessaire de:
-* Supprimer l'objet smartphone
-* Mettre à jour la ressource utilisateur pour enlever le smartphone venant d'être supprimé
-* Supprimer les données associées au smartphone dans la table `data`
-
-Il existe encore une fois deux possibilités pour réaliser cela:
-* Utiliser la [requête BATCH](http://docs.datastax.com/en/developer/java-driver/3.0/java-driver/reference/batch-statements.html)
-* Effectuer des [requêtes asynchrones](https://lostechies.com/ryansvihla/2014/08/28/cassandra-batch-loading-without-the-batch-keyword/)
