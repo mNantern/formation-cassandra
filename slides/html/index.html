@@ -350,7 +350,7 @@ WITH REPLICATION = {
 
 					<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
 						<h3>Installation de C*</h3>
-						<h6>Clonner le dépôt présent à l'adresse suivante et réaliser ce qui est indiqué dans le fichier <span class='highlight'>exercices/01_installation.md</span></h6>
+						<h6>Clonner le dépôt présent à l'adresse suivante et réaliser ce qui est indiqué dans le fichier <a href="https://github.com/mNantern/formation-cassandra/blob/master/exercices/01_installation.md">exercices/01_installation.md</a></h6>
 						<pre><code data-trim contenteditable>
 						git clone https://github.com/mNantern/formation-cassandra.git
 						</code></pre>
@@ -368,6 +368,7 @@ WITH REPLICATION = {
 						<ul>
 							<li><span class='highlight'>cluster_name:</span> toutes les machines d'un cluster doivent avoir le même nom</li>
 							<li><span class='highlight'>listen_address:</span> le port sur lequel C* écoute les autres noeuds</li>
+							<li><span class='highlight'>rpc_address:</span> le port sur lequel C* écoute les clients</li>
 						</ul>
 					</section>
 
@@ -449,14 +450,14 @@ WITH REPLICATION = {
 							</li>
 							<li>Création d'un keyspace:
 							<pre><code data-trim contenteditable>
-	CREATE KEYSPACE cassandra-iot
+	CREATE KEYSPACE cassandra_iot
 WITH REPLICATION = {
 	'class' : 'SimpleStrategy',
 	'replication_factor' : 1
 };
 							</code></pre>
 							</li>
-							<li>Afficher à nouveau la liste des keyspaces et le détail pour notre keyspace cassandra-iot</li>
+							<li>Afficher à nouveau la liste des keyspaces et le détail pour notre keyspace cassandra_iot</li>
 						</ol>
 					</section>
 
@@ -485,7 +486,7 @@ WITH REPLICATION = {
 						<h3>L'application Cassandra-iot</h3>
 						<p>Nous allons développer la partie back d'une application destinée à gérer les capteurs d'un smartphone.</p>
 						<p>Cette application devra être capable de gérer les données provenant de millions de capteurs de manière performante et sans interruption de service.</p>
-						<p>Notre application devra être capable de déclarer des smartphones, d'envoyer et de lire des données sur cet objet et de gérer des comptes utilisateurs.</p>
+						<p>Notre application devra être capable de déclarer des smartphones, de lire des données sur cet objet et de gérer des comptes utilisateurs.</p>
 					</section>
 					<section>
 						<h3>Keyspaces</h3>
@@ -495,7 +496,7 @@ WITH REPLICATION = {
 							<li>
 								Le paramètre de réplication est obligatoire:
 								<pre><code data-trim contenteditable>
-		CREATE KEYSPACE cassandra-iot
+		CREATE KEYSPACE cassandra_iot
 WITH REPLICATION = {
 	'class' : 'SimpleStrategy',
 	'replication_factor' : 1
@@ -505,7 +506,7 @@ WITH REPLICATION = {
 							<li>
 								Utiliser le mot clé <span class='highlight'>USE</span> pour changer de keyspace:
 								<pre><code data-trim contenteditable>
-		USE cassandra-iot;
+		USE cassandra_iot;
 								</code></pre>
 							</li>
 						</ul>
@@ -1147,7 +1148,7 @@ SELECT * FROM user_by_email;
 						<h3>Rappel: L'application Cassandra-iot</h3>
 						<p>Nous allons développer la partie back d'une application destinée à gérer les capteurs d'un smartphone.</p>
 						<p>Cette application devra être capable de gérer les données provenant de millions de capteurs de manière performante et sans interruption de service.</p>
-						<p>Notre application devra être capable de déclarer des smartphones, d'envoyer et de lire des données sur cet objet et de gérer des comptes utilisateurs.</p>
+						<p>Notre application devra être capable de déclarer des smartphones, de lire des données sur cet objet et de gérer des comptes utilisateurs.</p>
 					</section>
 					<section>
 						<h3>Le but</h3>
@@ -1359,6 +1360,12 @@ SELECT * FROM user_by_email;
 							<li><span class='highlight'>Node-to-node encryption:</span> communication via SSL entre les noeuds du cluster</li>
 							<li><span class='highlight'>Role Based Access Control (RBAC)</span></li>
 						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>Questions ?</h1>
 					</section>
 				</section>
 

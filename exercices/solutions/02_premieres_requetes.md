@@ -5,7 +5,7 @@ Solution de l'exercice 02
 ## Création du keyspace
 
 ```sql
-CREATE KEYSPACE cassandra-iot
+CREATE KEYSPACE cassandra_iot
 WITH REPLICATION = {
 	'class' : 'SimpleStrategy',
 	'replication_factor' : 1
@@ -15,14 +15,14 @@ WITH REPLICATION = {
 Sélectionner le keyspace:
 
 ```sql
-USE cassandra-iot;
+USE cassandra_iot;
 ```
 
 ## Création de notre première table: 'users'
 
 ```sql
 CREATE TABLE users (
-	user_id UUID PRIMARY KEY,
+	id UUID PRIMARY KEY,
 	first_name TEXT,
 	last_name TEXT,
 	email TEXT
@@ -34,7 +34,7 @@ CREATE TABLE users (
 Pour charger le fichier CQL il faut exécuter la commande suivante:
 
 ```
-COPY users FROM '02_users.csv' WITH HEADER=true;
+COPY users(id, first_name, last_name, email) FROM '/vagrant/data/02_users.csv' WITH HEADER=true;
 ```
 
 ## Premières requêtes
@@ -58,10 +58,12 @@ SELECT * from users WHERE email='rbailey5@ycombinator.com';
 ```sql
 CREATE TABLE users_by_email (
 	email TEXT PRIMARY KEY,
-	user_id UUID,
+	id UUID,
 	first_name TEXT,
 	last_name TEXT
 );
+
+COPY users_by_email(id, first_name, last_name, email) FROM '/vagrant/data/02_users.csv' WITH HEADER=true;
 
 SELECT * from users_by_email WHERE email='rbailey5@ycombinator.com';
 ```

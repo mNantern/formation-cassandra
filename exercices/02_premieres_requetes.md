@@ -9,7 +9,7 @@ Dans cet exercice nous allons:
 
 ## Création du keyspace
 
-Si ce n'est pas encore fait créer un keyspace nommé `cassandra-iot` pour nos futurs exercices.
+Si ce n'est pas encore fait créer un keyspace nommé `cassandra_iot` pour nos futurs exercices.
 
 La documentation pour la création d'un keyspace est disponible sur la page [CREATE KEYSPACE.](http://docs.datastax.com/en/cql/3.3/cql/cql_reference/create_keyspace_r.html)
 
@@ -33,10 +33,6 @@ Nous allons maintenant charger quelques utilisateurs dans notre nouvelle table:
 1. Regarder le contenu du fichier exercices/data/02_users.csv
 2. Charger le fichier dans notre table `users` en utilisant la commande [COPY](http://docs.datastax.com/en/cql/3.3/cql/cql_reference/copy_r.html)
 3. Vérifier que le bon nombre de données ont été inséré
-
-TODO: Ajouter le fichier CSV à la VM
-
-TODO: Tester le fichier CSV
 
 ## Premières requêtes
 
@@ -70,5 +66,7 @@ Nous allons créer une nouvelle table `users_by_email` nous permettant d'effectu
 | id       | UUID       |
 | first_name       | text       |
 | last_name       | text       |
+
+Charger les données dans cette nouvelle table.
 
 Refaire alors la requête de sélection d'un utilisateur par email.
