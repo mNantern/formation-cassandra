@@ -6,6 +6,7 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.TableMetadata;
 import com.datastax.driver.mapping.Mapper;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -71,18 +72,7 @@ public class US04 extends BaseTest {
   }
 
   @Test
-  public void testDelete() throws Exception {
-    //GIVEN
-    UUID id = UUID.randomUUID();
-
-    //WHEN
-    smartphonesRepository.delete(id);
-
-    //THEN
-    verify(mapper, times(1)).delete(id);
-  }
-
-  @Test
+  @Ignore(value = "Tested in US15")
   public void testUpdate() throws Exception {
     //GIVEN
     UUID id = UUID.randomUUID();
@@ -96,6 +86,7 @@ public class US04 extends BaseTest {
   }
 
   @Test
+  @Ignore(value = "Tested in US15")
   public void testCreate() throws Exception {
     //GIVEN
     UUID id = UUID.randomUUID();

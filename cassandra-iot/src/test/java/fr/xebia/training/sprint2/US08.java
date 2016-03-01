@@ -25,6 +25,8 @@ public class US08 extends BaseTest {
   private static final String CQL_US04 = "cql/US04.cql";
   private static final String CQL_US08 = "cql/US08.cql";
   public static final String TABLE_SMARTPHONES = "smartphones";
+  private static final String CQL_US15 = "cql/US15.cql";
+  private static final String CQL_US16 = "cql/US16.cql";
   private SmartphonesRepository smartphonesRepository;
   private UUID smartphoneId;
 
@@ -32,6 +34,8 @@ public class US08 extends BaseTest {
   public void setup() {
     loadCQL(CQL_US04);
     loadCQL(CQL_US08, false, false);
+    loadCQL(CQL_US15, false, false);
+    loadCQL(CQL_US16, false, false);
     smartphonesRepository = new SmartphonesRepository(session);
     smartphoneId = UUID.randomUUID();
     Smartphone smartphone = createSmartphone(smartphoneId);

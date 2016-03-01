@@ -23,6 +23,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class US03 extends BaseTest {
 
   public static final String CQL_US03 = "cql/US03.cql";
+  public static final String CQL_US11 = "cql/US11.cql";
 
   @Test
   public void testTableData() {
@@ -54,6 +55,7 @@ public class US03 extends BaseTest {
   public void testInsert() {
     //GIVEN
     loadCQL(CQL_US03);
+    loadCQL(CQL_US11, false, false);
     UsersRepository usersRepository = new UsersRepository(session);
 
     //WHEN
@@ -77,6 +79,7 @@ public class US03 extends BaseTest {
   public void testRead() {
     //GIVEN
     loadCQL(CQL_US03);
+    loadCQL(CQL_US11, false, false);
     UsersRepository usersRepository = new UsersRepository(session);
     String username = "test.integration@xebia.fr";
     UUID smartphoneId = UUID.randomUUID();
@@ -94,6 +97,7 @@ public class US03 extends BaseTest {
   public void testUpdate() {
     //GIVEN
     loadCQL(CQL_US03);
+    loadCQL(CQL_US11, false, false);
     UsersRepository usersRepository = new UsersRepository(session);
     String username = "test.integration@xebia.fr";
     UUID smartphoneId = UUID.randomUUID();
@@ -113,6 +117,7 @@ public class US03 extends BaseTest {
   public void testDelete() {
     //GIVEN
     loadCQL(CQL_US03);
+    loadCQL(CQL_US11, false, false);
     UsersRepository usersRepository = new UsersRepository(session);
     String username = "test.integration@xebia.fr";
     usersRepository.insert(createUser(username, UUID.randomUUID()));

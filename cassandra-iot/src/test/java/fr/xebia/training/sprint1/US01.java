@@ -24,6 +24,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 public class US01 extends BaseTest {
 
   public static final String CQL_US01 = "cql/US01.cql";
+  private static final String CQL_US16 = "cql/US16.cql";
 
   @Test
   public void testTableData() {
@@ -53,6 +54,7 @@ public class US01 extends BaseTest {
   public void testInsertEmptyList() {
     //GIVEN
     loadCQL(CQL_US01);
+    loadCQL(CQL_US16, false, false);
     DataRepository dataRepository = new DataRepository(session);
 
     //WHEN
@@ -68,6 +70,7 @@ public class US01 extends BaseTest {
   public void testInsertList() {
     //GIVEN
     loadCQL(CQL_US01);
+    loadCQL(CQL_US16, false, false);
     DataRepository dataRepository = new DataRepository(session);
     UUID smartphoneId = UUID.randomUUID();
     List<Data> input = createListData(smartphoneId);

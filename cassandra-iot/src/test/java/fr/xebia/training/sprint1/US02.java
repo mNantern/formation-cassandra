@@ -17,15 +17,17 @@ import static org.assertj.core.groups.Tuple.tuple;
 public class US02 extends BaseTest {
 
   public static final String CQL_US02 = "cql/US01.cql";
+  private static final String CQL_US16 = "cql/US16.cql";
 
   @Test
   public void testEmptyTable() {
     //GIVEN
     loadCQL(CQL_US02);
+    loadCQL(CQL_US16, false, false);
     DataRepository dataRepository = new DataRepository(session);
 
     //WHEN
-    List<Data> results = dataRepository.getBySmartphoneId(UUID.randomUUID());
+    List<Data> results = dataRepository.getBySmartphoneId(UUID.randomUUID(), null).getResults();
 
     //THEN
     assertThat(results).isEmpty();
@@ -35,12 +37,13 @@ public class US02 extends BaseTest {
   public void testGetBySmartphoneId() {
     //GIVEN
     loadCQL(CQL_US02);
+    loadCQL(CQL_US16, false, false);
     DataRepository dataRepository = new DataRepository(session);
     UUID smartphoneId = UUID.randomUUID();
     dataRepository.insert(createListData(smartphoneId));
 
     //WHEN
-    List<Data> results = dataRepository.getBySmartphoneId(smartphoneId);
+    List<Data> results = dataRepository.getBySmartphoneId(smartphoneId, null).getResults();
 
     //THEN
     assertThat(results.size()).isEqualTo(2);

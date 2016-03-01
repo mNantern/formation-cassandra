@@ -14,11 +14,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class US10 extends BaseTest {
 
   private static final String CQL_US03 = "cql/US03.cql";
+  private static final String CQL_US11 = "cql/US11.cql";
 
   @Test(expected = ConflictException.class)
   public void testDuplicateUser() {
     //GIVEN
     loadCQL(CQL_US03);
+    loadCQL(CQL_US11, false, false);
     UsersRepository usersRepository = new UsersRepository(session);
     String username = "test.integration@xebia.fr";
     usersRepository.insert(createUser(username, UUID.randomUUID()));

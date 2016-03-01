@@ -20,12 +20,14 @@ public class US06 extends BaseTest {
 
 
   private static final String CQL_US01 = "cql/US01.cql";
+  private static final String CQL_US16 = "cql/US16.cql";
   private static DataRepository dataRepository;
   private static UUID smartphoneId;
 
   @Before
   public void setup() {
     loadCQL(CQL_US01);
+    loadCQL(CQL_US16, false, false);
     dataRepository = new DataRepository(session);
     smartphoneId = UUID.randomUUID();
     List<Data> input = createListData(smartphoneId);
@@ -39,7 +41,9 @@ public class US06 extends BaseTest {
     Instant startDate = Instant.parse("2016-02-03T17:00:00.000Z");
 
     //WHEN
-    List<Data> dataList = dataRepository.getBySmartphoneIdStartDate(smartphoneId, startDate);
+    List<Data> dataList = dataRepository
+        .getBySmartphoneIdStartDate(smartphoneId, startDate, null)
+        .getResults();
 
     //THEN
     assertThat(dataList.size()).isEqualTo(1);
@@ -56,7 +60,9 @@ public class US06 extends BaseTest {
     Instant endDate = Instant.parse("2016-02-04T12:00:00.000Z");
 
     //WHEN
-    List<Data> dataList = dataRepository.getBySmartphoneIdEndDate(smartphoneId, endDate);
+    List<Data> dataList = dataRepository
+        .getBySmartphoneIdEndDate(smartphoneId, endDate, null)
+        .getResults();
 
     //THEN
     assertThat(dataList.size()).isEqualTo(2);
@@ -77,8 +83,9 @@ public class US06 extends BaseTest {
     Instant endDate = Instant.parse("2016-02-04T12:00:00.000Z");
 
     //WHEN
-    List<Data> dataList = dataRepository.getBySmartphoneIdStartEndDate(smartphoneId, startDate,
-                                                                       endDate);
+    List<Data> dataList = dataRepository
+        .getBySmartphoneIdStartEndDate(smartphoneId, startDate, endDate, null)
+        .getResults();
 
     //THEN
     assertThat(dataList.size()).isEqualTo(1);
@@ -95,8 +102,9 @@ public class US06 extends BaseTest {
     Instant endDate = Instant.parse("2015-02-04T12:00:00.000Z");
 
     //WHEN
-    List<Data> dataList = dataRepository.getBySmartphoneIdStartEndDate(smartphoneId,
-                                                                       startDate, endDate);
+    List<Data> dataList = dataRepository
+        .getBySmartphoneIdStartEndDate(smartphoneId, startDate, endDate, null)
+        .getResults();
 
     //THEN
     assertThat(dataList.size()).isEqualTo(0);

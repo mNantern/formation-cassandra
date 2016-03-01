@@ -3,10 +3,8 @@ package fr.xebia.training;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import fr.xebia.training.domain.model.Address;
@@ -44,8 +42,8 @@ public class ResourcesBuilder {
 
   public static User createUser(String username, UUID smartphoneId) {
 
-    Set<UUID> smartphonesId = new HashSet<>();
-    smartphonesId.add(smartphoneId);
+    Map<UUID, String> smartphonesId = new HashMap<>();
+    smartphonesId.put(smartphoneId, "MySmartphone");
 
     Map<String, Address> addressesMap = new HashMap<>();
     addressesMap.put("Xebia", createAddress());

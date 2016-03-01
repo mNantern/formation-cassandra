@@ -127,7 +127,12 @@ public class UsersRepository {
 
   public void update(String username, User user) {
     // US03: mise à jour d'un utilisateur
-    insert(user);
+    ResultSet result = session.execute(updateUserStmt.bind(user.getFirstname(),
+                                                           user.getLastname(),
+                                                           user.getPassword(),
+                                                           user.getSmartphonesId(),
+                                                           userToUDTValueMap(user),
+                                                           user.getUsername()));
   }
 
   public void addSmartphone(String owner, UUID smartphoneId, String smartphoneName) {

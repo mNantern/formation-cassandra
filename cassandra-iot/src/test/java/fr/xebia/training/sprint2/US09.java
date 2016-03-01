@@ -27,6 +27,7 @@ import static org.mockito.Mockito.verify;
 public class US09 extends BaseTest {
 
   private static final String CQL_US03 = "cql/US03.cql";
+  private static final String CQL_US11 = "cql/US11.cql";
   @Mock
   SmartphonesRepository smartphonesRepository;
 
@@ -45,25 +46,29 @@ public class US09 extends BaseTest {
     smartphonesService.create(smartphone);
 
     //THEN
-    verify(usersRepository, times(1)).addSmartphone(eq(smartphone.getOwner()), any(UUID.class));
+    verify(usersRepository, times(1)).addSmartphone(eq(smartphone.getOwner()), any(UUID.class),
+                                                    eq(smartphone.getName()));
   }
 
   @Test
   public void testAddSmartphone() {
     //GIVEN
     loadCQL(CQL_US03);
+    loadCQL(CQL_US11, false, false);
     UsersRepository usersRepository = new UsersRepository(session);
     String username = "test.integration@xebia.fr";
     UUID newSmartphoneId = UUID.randomUUID();
+    String newSmartphoneName = "MyNewSmartphone";
     usersRepository.insert(createUser(username, UUID.randomUUID()));
 
     //WHEN
-    usersRepository.addSmartphone(username, newSmartphoneId);
+    usersRepository.addSmartphone(username, newSmartphoneId, newSmartphoneName);
 
     //THEN
     User user = usersRepository.read(username);
     assertThat(user.getSmartphonesId().size()).isEqualTo(2);
-    assertThat(user.getSmartphonesId()).contains(newSmartphoneId);
+    assertThat(user.getSmartphonesId()).containsValues("MySmartphone", newSmartphoneName);
+    assertThat(user.getSmartphonesId()).containsKey(newSmartphoneId);
   }
 
 }

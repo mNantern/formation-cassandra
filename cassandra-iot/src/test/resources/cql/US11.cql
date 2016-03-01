@@ -1,6 +1,6 @@
 -- US11 : on change le type de la colonne smartphones: set -> map
 
-DROP TABLE users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE IF NOT EXISTS users (
    username text PRIMARY KEY,

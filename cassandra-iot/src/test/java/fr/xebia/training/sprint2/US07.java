@@ -17,12 +17,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class US07 extends BaseTest {
 
   private static final String CQL_US01 = "cql/US01.cql";
+  private static final String CQL_US16 = "cql/US16.cql";
   private static DataRepository dataRepository;
   private static UUID smartphoneId;
 
   @Before
   public void setup() {
     loadCQL(CQL_US01);
+    loadCQL(CQL_US16, false, false);
     dataRepository = new DataRepository(session);
     smartphoneId = UUID.randomUUID();
     List<Data> input = createListData(smartphoneId);
@@ -34,7 +36,7 @@ public class US07 extends BaseTest {
     //GIVEN
 
     //WHEN
-    List<Data> results = dataRepository.getBySmartphoneId(smartphoneId);
+    List<Data> results = dataRepository.getBySmartphoneId(smartphoneId, null).getResults();
 
     //THEN
     assertThat(results).extracting("eventTime").containsExactly(
@@ -48,7 +50,9 @@ public class US07 extends BaseTest {
     Instant startDate = Instant.parse("2010-02-04T12:00:00Z");
 
     //WHEN
-    List<Data> results = dataRepository.getBySmartphoneIdStartDate(smartphoneId, startDate);
+    List<Data> results = dataRepository
+        .getBySmartphoneIdStartDate(smartphoneId, startDate, null)
+        .getResults();
 
     //THEN
     assertThat(results).extracting("eventTime").containsExactly(
@@ -62,7 +66,9 @@ public class US07 extends BaseTest {
     Instant endDate = Instant.parse("2020-02-04T12:00:00Z");
 
     //WHEN
-    List<Data> results = dataRepository.getBySmartphoneIdEndDate(smartphoneId, endDate);
+    List<Data> results = dataRepository
+        .getBySmartphoneIdEndDate(smartphoneId, endDate, null)
+        .getResults();
 
     //THEN
     assertThat(results).extracting("eventTime").containsExactly(
@@ -77,8 +83,9 @@ public class US07 extends BaseTest {
     Instant endDate = Instant.parse("2020-02-04T12:00:00Z");
 
     //WHEN
-    List<Data> results = dataRepository.getBySmartphoneIdStartEndDate(smartphoneId, startDate,
-                                                                      endDate);
+    List<Data> results = dataRepository
+        .getBySmartphoneIdStartEndDate(smartphoneId, startDate, endDate, null)
+        .getResults();
 
     //THEN
     assertThat(results).extracting("eventTime").containsExactly(
