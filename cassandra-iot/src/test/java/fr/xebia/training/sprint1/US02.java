@@ -3,7 +3,6 @@ package fr.xebia.training.sprint1;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +26,7 @@ public class US02 extends BaseTest {
     DataRepository dataRepository = new DataRepository(session);
 
     //WHEN
-    Collection<Data> results = dataRepository.getBySmartphoneId(UUID.randomUUID());
+    List<Data> results = dataRepository.getBySmartphoneId(UUID.randomUUID());
 
     //THEN
     assertThat(results).isEmpty();

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +51,7 @@ public class DataRepository {
     });
   }
 
-  public Collection<Data> getBySmartphoneId(UUID smartphoneId) {
+  public List<Data> getBySmartphoneId(UUID smartphoneId) {
     checkNotNull(smartphoneId);
     // US02: récupérer l'ensemble des données liées à un smartphone
     Statement select = QueryBuilder

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -35,14 +35,14 @@ public class DataController {
 
   @RequestMapping(value={"/", ""}, method= RequestMethod.POST)
   @ResponseStatus(value = HttpStatus.CREATED)
-  public Collection<Data> createData(@RequestBody @Valid Collection<InputData> inputData) {
-    Collection<Data> data = dataService.insertInputData(inputData);
+  public List<Data> createData(@RequestBody @Valid List<InputData> inputData) {
+    List<Data> data = dataService.insertInputData(inputData);
     data.stream().forEach(d -> LOGGER.info(d.toString()));
     return data;
   }
 
   @RequestMapping(value={"/", ""}, method= RequestMethod.GET)
-  public Collection<Data> getData(@RequestParam UUID smartphoneId){
+  public List<Data> getData(@RequestParam UUID smartphoneId) {
     return dataService.getData(smartphoneId);
   }
 
