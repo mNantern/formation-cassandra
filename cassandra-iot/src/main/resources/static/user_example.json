@@ -3,10 +3,10 @@
   "firstname": "John",
   "lastname": "Doe",
   "password": "s3cr3t",
-  "smartphonesId": {
-    "0a7cda2c-d649-4c79-9271-595e007ac527": "iPhone6",
-    "4c0441cb-b435-4de5-a7e4-f49eb7b49036": "Mon Moto"
-  },
+  "smartphonesId": [
+    "0a7cda2c-d649-4c79-9271-595e007ac527",
+    "4c0441cb-b435-4de5-a7e4-f49eb7b49036"
+  ],
   "addresses": {
     "livraison": {
       "street": "3, rue des plantes",

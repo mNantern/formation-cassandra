@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import fr.xebia.training.domain.exceptions.ConflictException;
@@ -102,7 +104,7 @@ public class UsersRepository {
         .firstname(row.getString("firstname"))
         .lastname(row.getString("lastname"))
         .password(row.getString("pass"))
-        .smartphonesId(row.getMap("smartphones", UUID.class, String.class))
+        .smartphonesId(row.getSet("smartphones", UUID.class))
         .addresses(addresses)
         .build();
   }
@@ -135,11 +137,10 @@ public class UsersRepository {
                                         username));
   }
 
-  public void addSmartphone(String owner, UUID smartphoneId, String smartphoneName) {
+  public void addSmartphone(String owner, UUID smartphoneId) {
     //US09 : ajout d'un smartphone à l'utilisateur
-    //US11 : ajout du nom du smartphone en plus de l'id
-    Map<UUID,String> toAdd = new HashMap<>();
-    toAdd.put(smartphoneId, smartphoneName);
+    Set<UUID> toAdd = new HashSet<>();
+    toAdd.add(smartphoneId);
     session.execute(addSmartphoneStmt.bind(toAdd, owner));
   }
 }
