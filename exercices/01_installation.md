@@ -8,7 +8,11 @@ Deux manière d'installer Cassandra sont proposées:
 ### Installation
 1. Installer Virtualbox (les exécutables sont fournis dans la clé USB)
 2. Installer Vagrant (les exécutables sont fournis dans la clé USB)
-3. Se placer dans le dossier *tools/vagrant* et exécuter la commande suivante:
+3. Importer l'image de base:
+```
+vagrant box add ~/<path_to_usb_key>/cassandra_iot.box --name cassandra_iot
+```
+4. Se placer dans le dossier *tools/vagrant* et exécuter la commande suivante:
 
 ```bash
 vagrant up
