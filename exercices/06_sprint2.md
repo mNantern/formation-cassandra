@@ -17,10 +17,12 @@ Pour éviter cela nous allons [configurer une 'LoadBalancingPolicy'](https://aca
 
 ### US06 : Pouvoir faire une recherche par date
 
-Nous voulons pouvoir filtrer les résultats renvoyés par le service /data en fonction d'une date de début et d'une date de fin.
+Nous voulons pouvoir filtrer les résultats renvoyés par le service /data en fonction d'une date de début et/ou d'une date de fin.
 
 1. Vérifier que la modélisation choisie permet d'effectuer les requêtes demandées
 2. Modifier le service afin de renvoyer les résultats filtrés
+
+:warning: Les données existantes à la date de début sont exclues tandis que les données existantes à la date de fin sont inclues.
 
 ### US07 : Trier les résultats par date
 
@@ -52,9 +54,3 @@ Un problème est arrivé en production: deux utilisateurs ont choisit le même u
 Il est nécessaire de ne pas écraser un compte utilisateur si celui-ci existe déjà. Une erreur `HTTP 409 Conflict` doit être renvoyée dans ce cas.
 
 Utiliser pour cela les [LWT](http://docs.datastax.com/en/developer/java-driver/3.0/java-driver/jd-faq.html#faq-conditional-statement).
-
-### US11 : Remplacer l'identifiant du smartphone par son nom
-
-**=> Retour aux slides !**
-
-Dans notre cas nous allons considérer que le nom du smartphone ne change pas. Il faut donc dénormaliser les données en ajoutant également le nom du smartphone dans la ressource utilisateur.

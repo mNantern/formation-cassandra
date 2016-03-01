@@ -3,7 +3,7 @@
 ## Connexion à Cassandra
 
 ### US00 : créer une session vers Cassandra
-La première étape va être de se connecter à Cassandra. Il va falloir créer une session puis créer un keyspace `cassandra-iot` si celui-ci n'existe pas.
+La première étape va être de se connecter à Cassandra. Il va falloir créer une session puis créer un keyspace `cassandra_iot` si celui-ci n'existe pas.
 
 Voici la documentation associée et le code doit être mis en place dans la classe Application:
 * [Se connecter à un cluster Cassandra](http://docs.datastax.com/en/developer/java-driver/3.0/java-driver/quick_start/qsSimpleClientCreate_t.html)

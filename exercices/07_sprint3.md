@@ -1,5 +1,13 @@
 # Exercice 07 : Sprint 3
 
+## Users
+
+### US11 : Remplacer l'identifiant du smartphone par son nom
+
+**=> Retour aux slides !**
+
+Dans notre cas nous allons considérer que le nom du smartphone ne change pas. Il faut donc dénormaliser les données en ajoutant également le nom du smartphone dans la ressource utilisateur.
+
 ## Data
 
 ![Smartphone Data v3](https://raw.githubusercontent.com/mNantern/formation-cassandra/master/exercices/data/media/smartphone_data3.png)
