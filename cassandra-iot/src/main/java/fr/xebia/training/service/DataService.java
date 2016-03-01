@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,13 +24,13 @@ public class DataService {
     this.dataRepository = dataRepository;
   }
 
-  public Collection<Data> insertInputData(Collection<InputData> inputDataCollection) {
+  public List<Data> insertInputData(List<InputData> inputDataCollection) {
     List<Data> dataCollection = convertToDataList(inputDataCollection);
     dataRepository.insert(dataCollection);
     return dataCollection;
   }
 
-  private List<Data> convertToDataList(Collection<InputData> inputDataCollection) {
+  private List<Data> convertToDataList(List<InputData> inputDataCollection) {
     InputDataMapper mapper = Selma.builder(InputDataMapper.class).build();
     return inputDataCollection.stream()
         .map(inputData -> {
@@ -42,7 +41,7 @@ public class DataService {
         .collect(Collectors.toList());
   }
 
-  public Collection<Data> getData(UUID smartphoneId, Instant startDate, Instant endDate) {
+  public List<Data> getData(UUID smartphoneId, Instant startDate, Instant endDate) {
     boolean startDateNull = (startDate == null);
     boolean endDateNull = (endDate == null);
     boolean allNull = startDateNull && endDateNull;
