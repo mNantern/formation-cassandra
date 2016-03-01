@@ -71,18 +71,6 @@ public class US04 extends BaseTest {
   }
 
   @Test
-  public void testDelete() throws Exception {
-    //GIVEN
-    UUID id = UUID.randomUUID();
-
-    //WHEN
-    smartphonesRepository.delete(id);
-
-    //THEN
-    verify(mapper, times(1)).delete(id);
-  }
-
-  @Test
   public void testUpdate() throws Exception {
     //GIVEN
     UUID id = UUID.randomUUID();
