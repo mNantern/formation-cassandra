@@ -23,6 +23,7 @@ import fr.xebia.training.domain.model.Type;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.desc;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Repository
 public class DataRepository {
@@ -83,6 +84,7 @@ public class DataRepository {
   }
 
   public ResultPage<Data> getBySmartphoneId(UUID smartphoneId, String pagingState) {
+    checkNotNull(smartphoneId);
     // US02: récupérer l'ensemble des données liées à un smartphone
     Statement select = QueryBuilder
         .select()

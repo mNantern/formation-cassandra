@@ -59,6 +59,11 @@ public class SmartphonesRepository {
     readCounterStmt = session.prepare(READ_SMARTPHONE_COUNTER);
   }
 
+  public SmartphonesRepository(Session session, Mapper<Smartphone> mapper) {
+    this.session = session;
+    this.mapper = mapper;
+  }
+
   public Smartphone read(UUID id) {
     // US04: lecture d'un smartphone
     return mapper.get(id);

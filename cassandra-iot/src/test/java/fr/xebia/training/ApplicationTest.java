@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ApplicationTest extends BaseTest{
+public class ApplicationTest extends BaseTest {
 
   @Test
   public void testBuildCassandraSessionUS00() throws Exception {
@@ -27,7 +27,7 @@ public class ApplicationTest extends BaseTest{
   }
 
   @Test
-  public void testLoadCQL(){
+  public void testLoadCQL() {
     assertThat(dataLoader).isNotNull();
     loadCQL("cql/Application.cql");
     Statement select = QueryBuilder.select().all().from("test");
