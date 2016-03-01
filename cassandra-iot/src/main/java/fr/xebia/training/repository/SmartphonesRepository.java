@@ -35,6 +35,11 @@ public class SmartphonesRepository {
     deleteSmartphoneStmt = session.prepare(DELETE_SMARTPHONE);
   }
 
+  public SmartphonesRepository(Session session, Mapper<Smartphone> mapper) {
+    this.session = session;
+    this.mapper = mapper;
+  }
+
   public Smartphone read(UUID id) {
     // US04: lecture d'un smartphone
     return mapper.get(id);

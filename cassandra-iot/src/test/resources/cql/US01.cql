@@ -1,6 +1,6 @@
 -- US01 : créer la table permettant de gérer les data de nos smartphones
 
-CREATE TABLE data (
+CREATE TABLE IF NOT EXISTS data (
    id uuid,
    smartphone_id uuid,
    event_time timestamp,
