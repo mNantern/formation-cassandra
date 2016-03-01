@@ -17,12 +17,14 @@ Pour éviter cela nous allons [configurer une 'LoadBalancingPolicy'](https://aca
 
 ### US06 : Pouvoir faire une recherche par date
 
-Nous voulons pouvoir filtrer les résultats renvoyés par le service /data en fonction d'une date de début et d'une date de fin.
+Nous voulons pouvoir filtrer les résultats renvoyés par le service /data en fonction d'une date de début et/ou d'une date de fin.
 
 1. Vérifier que la modélisation choisie permet d'effectuer les requêtes demandées
 2. Modifier le service afin de renvoyer les résultats filtrés
 
-### US07 : Trier les résultats par date et type de données
+:warning: Les données existantes à la date de début sont exclues tandis que les données existantes à la date de fin sont inclues.
+
+### US07 : Trier les résultats par date
 
 Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la plus récente à la plus ancienne ou le contraire) et/ou du type de données.
 
@@ -34,6 +36,7 @@ Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la 
 2. Ajouter le propriétaire du smartphone lors de la création du smartphone
 3. Lors de la demande de suppression vérifier que le demandeur est bien le propriétaire (en une seule requête, sans faire de READ BEFORE WRITE)
 
+:information_source: Dans le cas où ce n'est pas le propriétaire qui tente de supprimer le smartphone il faut renvoyer une erreur HTTP 403.
 
 ## Utilisateur
 
@@ -43,15 +46,11 @@ Nous voulons en plus pouvoir trier les résultats en fonction de la date (de la 
 
 Lors de la création d'un smartphone il est nécessaire de l'ajouter à l'utilisateur sans quoi le smartphone ne pourra pas être consulté depuis la page utilisateur.
 
+:warning:  Que faire quand l'ajout d'un smartphone échoue ou que l'utilisateur n'existe pas ?
+
 ### US10 : Création concurrente d'utilisateur
 
 Un problème est arrivé en production: deux utilisateurs ont choisit le même username (adresse email) au même moment. Le premier a perdu son compte sans aucune erreur.
 Il est nécessaire de ne pas écraser un compte utilisateur si celui-ci existe déjà. Une erreur `HTTP 409 Conflict` doit être renvoyée dans ce cas.
 
 Utiliser pour cela les [LWT](http://docs.datastax.com/en/developer/java-driver/3.0/java-driver/jd-faq.html#faq-conditional-statement).
-
-### US11 : Remplacer l'identifiant du smartphone par son nom
-
-**=> Retour aux slides !**
-
-Dans notre cas nous allons considérer que le nom du smartphone ne change pas. Il faut donc dénormaliser les données en ajoutant également le nom du smartphone dans la ressource utilisateur.

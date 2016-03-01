@@ -1195,6 +1195,10 @@ SELECT * FROM user_by_email;
 								<span class='highlight'>US4:</span> Gestion des smartphones
 							</li>
 						</ol>
+						<br />
+						<p>
+							=> Le code source à compléter est disponible dans la branche <span class='highlight'>sprint1</span>
+						</p>
 					</section>
 					<section>
 						<h3>Sprint 2</h3>
@@ -1220,27 +1224,10 @@ SELECT * FROM user_by_email;
 							<li>
 								<span class='highlight'>US10:</span> Eviter les créations de compte concurrentes.
 							</li>
-							<li>
-								<span class='highlight'>US11:</span> Afficher le nom du smartphone dans la liste des smartphones de l'utilisateur au lieu de son identifiant.
-							</li>
 						</ol>
-					</section>
-					<section>
-						<h3>US 11 : Plusieurs possibilités</h3>
 						<p>
-							Pour afficher le nom du smartphone au lieu de son identifiant il existe plusieurs options:
+							=> Le code source à compléter est disponible dans la branche <span class='highlight'>sprint2</span>
 						</p>
-						<ol>
-							<li>
-								Faire une requête de type 'SELECT ... IN (id1,id2)'
-							</li>
-							<li>
-								Faire N requêtes (une par smartphone) asynchrones
-							</li>
-							<li>
-								Dénormaliser l'information 'smartphone_name' dans la ressource utilisateur.
-							</li>
-						</ol>
 					</section>
 					<section>
 						<h3>Sprint 3</h3>
@@ -1248,6 +1235,9 @@ SELECT * FROM user_by_email;
 					<section>
 						<h3>Présentation des US</h3>
 						<ol>
+							<li>
+								<span class='highlight'>US11:</span> Afficher le nom du smartphone dans la liste des smartphones de l'utilisateur au lieu de son identifiant.
+							</li>
 							<li>
 								<span class='highlight'>US12:</span> Paginer la liste des données d'un smartphone
 							</li>
@@ -1268,6 +1258,26 @@ SELECT * FROM user_by_email;
 							</li>
 							<li>
 								<span class='highlight'>US18:</span> Permettre la suppression d'un smartphone depuis la page utilisateur.
+							</li>
+						</ol>
+						<p>
+							=> Le code source à compléter est disponible dans la branche <span class='highlight'>sprint3</span>
+						</p>
+					</section>
+					<section>
+						<h3>US 11 : Plusieurs possibilités</h3>
+						<p>
+							Pour afficher le nom du smartphone au lieu de son identifiant il existe plusieurs options:
+						</p>
+						<ol>
+							<li>
+								Faire une requête de type 'SELECT ... IN (id1,id2)'
+							</li>
+							<li>
+								Faire N requêtes (une par smartphone) asynchrones
+							</li>
+							<li>
+								Dénormaliser l'information 'smartphone_name' dans la ressource utilisateur.
 							</li>
 						</ol>
 					</section>
