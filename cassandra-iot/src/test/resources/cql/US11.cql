@@ -2,7 +2,7 @@
 
 DROP TABLE users;
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
    username text PRIMARY KEY,
    firstname text,
    lastname text,

@@ -1,6 +1,6 @@
 -- US15 : recherche de smartphone par nom constructeur
 
-CREATE TABLE smartphones_by_constructor (
+CREATE TABLE IF NOT EXISTS smartphones_by_constructor (
    id uuid,
    name text,
    constructor text,
