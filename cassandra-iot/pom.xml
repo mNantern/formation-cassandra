@@ -25,7 +25,7 @@
         <cassandra-driver.version>2.1.9</cassandra-driver.version>
         <jackson.version>2.6.1</jackson.version>
         <assertj.version>3.3.0</assertj.version>
-        <achilles.version>4.0.1</achilles.version>
+        <cassandra-unit.version>2.2.2.1</cassandra-unit.version>
     </properties>
 
 	<dependencies>
@@ -77,6 +77,14 @@
             <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.cassandraunit</groupId>
+            <artifactId>cassandra-unit</artifactId>
+            <version>${cassandra-unit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
 	</dependencies>
 	
 	<build>
