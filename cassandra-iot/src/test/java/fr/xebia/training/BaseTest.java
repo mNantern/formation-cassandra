@@ -5,12 +5,9 @@ import com.datastax.driver.core.Session;
 
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.StringJoiner;
 
-@RunWith(MockitoJUnitRunner.class)
 public class BaseTest {
 
   public static final String LOCALHOST = "127.0.0.1";
@@ -45,7 +42,10 @@ public class BaseTest {
   }
 
   protected void loadCQL(String filepath) {
-    dataLoader.load(new ClassPathCQLDataSet(filepath, false, false, KEYSPACE));
+    dataLoader.load(new ClassPathCQLDataSet(filepath, true, true, KEYSPACE));
   }
 
+  protected void loadCQL(String filepath, boolean create, boolean delete) {
+    dataLoader.load(new ClassPathCQLDataSet(filepath, create, delete, KEYSPACE));
+  }
 }

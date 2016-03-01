@@ -60,4 +60,32 @@ public class Address {
     }
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Address address = (Address) o;
+
+    if (zipCode != address.zipCode) {
+      return false;
+    }
+    if (!street.equals(address.street)) {
+      return false;
+    }
+    return city.equals(address.city);
+
+  }
+
+  @Override
+  public int hashCode() {
+    int result = street.hashCode();
+    result = 31 * result + city.hashCode();
+    result = 31 * result + zipCode;
+    return result;
+  }
 }

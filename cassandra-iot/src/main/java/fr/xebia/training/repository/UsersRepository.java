@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import fr.xebia.training.Application;
 import fr.xebia.training.domain.exceptions.NotFoundException;
 import fr.xebia.training.domain.model.Address;
 import fr.xebia.training.domain.model.User;
@@ -63,7 +62,7 @@ public class UsersRepository {
 
   private Map<String, UDTValue> userToUDTValueMap(User user) {
     UserType addressUDT = session.getCluster().getMetadata()
-        .getKeyspace(Application.KEYSPACE)
+        .getKeyspace(session.getLoggedKeyspace())
         .getUserType("address");
 
     Map<String,UDTValue> udtValueMap = new HashMap<>();
@@ -117,11 +116,6 @@ public class UsersRepository {
 
   public void update(String username, User user) {
     // US03: mise à jour d'un utilisateur
-    session.execute(updateUserStmt.bind(user.getFirstname(),
-                                        user.getLastname(),
-                                        user.getPassword(),
-                                        user.getSmartphonesId(),
-                                        userToUDTValueMap(user),
-                                        username));
+    insert(user);
   }
 }

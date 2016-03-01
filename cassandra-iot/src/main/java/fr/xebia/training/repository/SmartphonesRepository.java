@@ -24,6 +24,11 @@ public class SmartphonesRepository {
     mapper = new MappingManager(session).mapper(Smartphone.class);
   }
 
+  public SmartphonesRepository(Session session, Mapper<Smartphone> mapper) {
+    this.session = session;
+    this.mapper = mapper;
+  }
+
   public Smartphone read(UUID id) {
     // US04: lecture d'un smartphone
     return mapper.get(id);
