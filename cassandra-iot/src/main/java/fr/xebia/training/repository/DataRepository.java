@@ -19,7 +19,6 @@ import java.util.UUID;
 import fr.xebia.training.domain.model.Data;
 import fr.xebia.training.domain.model.Type;
 
-import static com.datastax.driver.core.querybuilder.QueryBuilder.desc;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -28,21 +27,10 @@ public class DataRepository {
 
   public static final String INSERT_DATA =
       "INSERT INTO data (id, smartphone_id, event_time, type, value) VALUES (?, ?, ?, ?, ?); ";
-  public static final String SELECT_DATA_START_DATE =
-      "select * from data WHERE smartphone_id=? AND event_time > ? ORDER BY event_time DESC;";
-  public static final String SELECT_DATA_END_DATE =
-      "select * from data WHERE smartphone_id=? AND event_time <= ? ORDER BY event_time DESC;";
-  public static final String SELECT_DATA_START_END_DATE =
-      "select * from data "
-      + "WHERE smartphone_id=? AND event_time > ? AND event_time <= ? "
-      + "ORDER BY event_time DESC;";
 
   private Session session;
 
   private PreparedStatement insertDataStmt;
-  private PreparedStatement selectDataStartDateStmt;
-  private PreparedStatement selectDataEndDateStmt;
-  private PreparedStatement selectDataStartEndDateStmt;
 
   @Autowired
   public DataRepository(Session session) {
@@ -52,9 +40,6 @@ public class DataRepository {
 
   private void prepareStatements() {
     insertDataStmt = session.prepare(INSERT_DATA);
-    selectDataStartDateStmt = session.prepare(SELECT_DATA_START_DATE);
-    selectDataEndDateStmt = session.prepare(SELECT_DATA_END_DATE);
-    selectDataStartEndDateStmt = session.prepare(SELECT_DATA_START_END_DATE);
   }
 
   public void insert(List<Data> dataCollection){
@@ -75,8 +60,7 @@ public class DataRepository {
         .select()
         .all()
         .from("data")
-        .where(eq("smartphone_id",smartphoneId))
-        .orderBy(desc("event_time"));
+        .where(eq("smartphone_id", smartphoneId));
     //US07: trier par date
 
     return getDataListFromResultSet(session.execute(select));
@@ -100,24 +84,17 @@ public class DataRepository {
 
   public List<Data> getBySmartphoneIdStartDate(UUID smartphoneId, Instant startDate) {
     //US06 : recherche avec date début
-    ResultSet results = session.execute(selectDataStartDateStmt.bind(smartphoneId,
-                                                                     Date.from(startDate)));
-    return getDataListFromResultSet(results);
+    return null;
   }
 
   public List<Data> getBySmartphoneIdEndDate(UUID smartphoneId, Instant endDate) {
     //US06 : recherche avec date de fin
-    ResultSet results = session.execute(selectDataEndDateStmt.bind(smartphoneId,
-                                                                   Date.from(endDate)));
-    return getDataListFromResultSet(results);
+    return null;
   }
 
   public List<Data> getBySmartphoneIdStartEndDate(UUID smartphoneId, Instant startDate,
                                                   Instant endDate) {
     //US06 : recherche avec date début + dateFin
-    ResultSet results = session.execute(selectDataStartEndDateStmt.bind(smartphoneId,
-                                                                        Date.from(startDate),
-                                                                        Date.from(endDate)));
-    return getDataListFromResultSet(results);
+    return null;
   }
 }

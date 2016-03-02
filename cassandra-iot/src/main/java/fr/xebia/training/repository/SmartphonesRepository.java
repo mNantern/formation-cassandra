@@ -11,13 +11,13 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-import fr.xebia.training.domain.exceptions.ForbiddenException;
 import fr.xebia.training.domain.model.Smartphone;
 
 @Repository
 public class SmartphonesRepository {
 
-  public static final String DELETE_SMARTPHONE = "DELETE FROM smartphones WHERE id=? IF owner=?;";
+  //US08: seul le propriétaire peut supprimer le smartphone
+  public static final String DELETE_SMARTPHONE = "DELETE FROM smartphones WHERE id=?;";
   private Session session;
 
   private Mapper<Smartphone> mapper;
@@ -47,11 +47,8 @@ public class SmartphonesRepository {
 
   public void delete(UUID id, String userId) {
     // US04: suppression d'un smartphone
-    // US08: seul le propriétaire peut supprimer le smartphone
     ResultSet result = session.execute(deleteSmartphoneStmt.bind(id, userId));
-    if(!result.wasApplied()){
-      throw new ForbiddenException();
-    }
+    // US08: seul le propriétaire peut supprimer le smartphone
   }
 
   public void update(UUID id, Smartphone smartphone) {

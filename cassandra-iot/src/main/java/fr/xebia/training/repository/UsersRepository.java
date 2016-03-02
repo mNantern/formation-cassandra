@@ -11,12 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
-import fr.xebia.training.domain.exceptions.ConflictException;
 import fr.xebia.training.domain.exceptions.NotFoundException;
 import fr.xebia.training.domain.model.Address;
 import fr.xebia.training.domain.model.User;
@@ -24,16 +21,15 @@ import fr.xebia.training.domain.model.User;
 @Repository
 public class UsersRepository {
 
+  //US10: interdire la création d'un utilisateur si le username est déjà utilisé
   public static final String INSERT_USER =
       "INSERT INTO users (username, firstname, lastname, pass, smartphones, addresses) "
-      + "VALUES (?, ?, ?, ?, ?, ?) IF NOT EXISTS;";
+      + "VALUES (?, ?, ?, ?, ?, ?);";
   public static final String SELECT_USER = "SELECT * FROM users WHERE username=?;";
   public static final String DELETE_USER = "DELETE FROM users WHERE username=?;";
   public static final String UPDATE_USER =
       "UPDATE users SET firstname = ?, lastname = ?, pass = ?, smartphones = ?, addresses = ? "
       + "WHERE username = ?;";
-  public static final String ADD_SMARTPHONE =
-      "UPDATE users SET smartphones = smartphones + ? WHERE username = ?;";
 
   private Session session;
 
@@ -41,7 +37,6 @@ public class UsersRepository {
   private PreparedStatement selectUserStmt;
   private PreparedStatement deleteUserStmt;
   private PreparedStatement updateUserStmt;
-  private PreparedStatement addSmartphoneStmt;
 
   @Autowired
   public UsersRepository(Session session) {
@@ -54,7 +49,6 @@ public class UsersRepository {
     selectUserStmt = session.prepare(SELECT_USER);
     deleteUserStmt = session.prepare(DELETE_USER);
     updateUserStmt = session.prepare(UPDATE_USER);
-    addSmartphoneStmt = session.prepare(ADD_SMARTPHONE);
   }
 
   public User insert(User user) {
@@ -66,10 +60,6 @@ public class UsersRepository {
                                                            user.getSmartphonesId(),
                                                            userToUDTValueMap(user)));
     //US10 : interdire la création d'un utilisateur si celui-ci existe déjà
-    if(!result.wasApplied()){
-      throw new ConflictException();
-    }
-
     return user;
   }
 
@@ -139,8 +129,5 @@ public class UsersRepository {
 
   public void addSmartphone(String owner, UUID smartphoneId) {
     //US09 : ajout d'un smartphone à l'utilisateur
-    Set<UUID> toAdd = new HashSet<>();
-    toAdd.add(smartphoneId);
-    session.execute(addSmartphoneStmt.bind(toAdd, owner));
   }
 }

@@ -2,8 +2,6 @@ package fr.xebia.training;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.policies.DCAwareRoundRobinPolicy;
-import com.datastax.driver.core.policies.TokenAwarePolicy;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,13 +34,10 @@ public class Application {
   public Session buildCassandraSession(){
 
     //US00 : créer une session vers Cassandra
+    //US05 : appeler une machine locale
     Session session = Cluster.builder()
         .addContactPoint(LOCALHOST)
-        .withLoadBalancingPolicy(
-            new TokenAwarePolicy(DCAwareRoundRobinPolicy.builder().build())
-        )
         .build().connect();
-    //US05 : appeler une machine locale
 
     createKeyspace(session);
     useKeyspace(session);

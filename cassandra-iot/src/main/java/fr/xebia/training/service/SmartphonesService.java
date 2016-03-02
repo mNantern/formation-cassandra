@@ -13,13 +13,11 @@ import fr.xebia.training.repository.UsersRepository;
 public class SmartphonesService {
 
   private SmartphonesRepository smartphonesRepository;
-  private UsersRepository usersRepository;
 
   @Autowired
   public SmartphonesService(SmartphonesRepository smartphonesRepository,
                             UsersRepository usersRepository) {
     this.smartphonesRepository = smartphonesRepository;
-    this.usersRepository = usersRepository;
   }
 
   public Smartphone read(UUID id) {
@@ -39,7 +37,6 @@ public class SmartphonesService {
     smartphone.setId(UUID.randomUUID());
     smartphonesRepository.create(smartphone);
     //US09 : ajouter le smartphone créé dans l'utilisateur correspondant
-    usersRepository.addSmartphone(smartphone.getOwner(), smartphone.getId());
     return smartphone;
   }
 }
