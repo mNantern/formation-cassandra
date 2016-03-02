@@ -1,18 +1,12 @@
 package fr.xebia.training.domain.model;
 
-import com.datastax.driver.mapping.annotations.PartitionKey;
-import com.datastax.driver.mapping.annotations.Table;
-
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.UUID;
 
-import fr.xebia.training.Application;
-
-@Table(keyspace = Application.KEYSPACE, name = "smartphones")
+//US04 : annoter convenablement la classe Smartphone
 public class Smartphone {
 
-  @PartitionKey
   private UUID id;
 
   @NotEmpty
