@@ -1,6 +1,5 @@
 package fr.xebia.training.repository;
 
-import com.datastax.driver.core.PagingState;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,8 +28,7 @@ public class DataRepository {
 
   //US13: add a TTL
   public static final String INSERT_DATA =
-      "INSERT INTO data (id, smartphone_id, event_time, type, value) VALUES (?, ?, ?, ?, ?) "
-      + "USING TTL 7776000;";
+      "INSERT INTO data (id, smartphone_id, event_time, type, value) VALUES (?, ?, ?, ?, ?);";
   public static final String SELECT_DATA_START_DATE =
       "select * from data "
       + "WHERE smartphone_id=? AND event_time > ? "
@@ -45,8 +42,6 @@ public class DataRepository {
       + "WHERE smartphone_id=? AND event_time > ? AND event_time <= ? "
       + "ORDER BY event_time DESC;";
   public static final int FETCH_SIZE = 20;
-  public static final String UPDATE_COUNTER =
-      "UPDATE number_data_by_smartphones SET data = data + 1 WHERE smartphone_id= ?;";
 
   private Session session;
 
@@ -54,7 +49,6 @@ public class DataRepository {
   private PreparedStatement selectDataStartDateStmt;
   private PreparedStatement selectDataEndDateStmt;
   private PreparedStatement selectDataStartEndDateStmt;
-  private PreparedStatement updateCounterStmt;
 
   @Autowired
   public DataRepository(Session session) {
@@ -67,7 +61,6 @@ public class DataRepository {
     selectDataStartDateStmt = session.prepare(SELECT_DATA_START_DATE);
     selectDataEndDateStmt = session.prepare(SELECT_DATA_END_DATE);
     selectDataStartEndDateStmt = session.prepare(SELECT_DATA_START_END_DATE);
-    updateCounterStmt = session.prepare(UPDATE_COUNTER);
   }
 
   public void insert(List<Data> dataCollection){
@@ -79,7 +72,6 @@ public class DataRepository {
                                           data.getType().toString(),
                                           data.getValue()));
       //US16 : compter le nombre de données par smartphone
-      session.execute(updateCounterStmt.bind(data.getSmartphoneId()));
     });
   }
 
@@ -91,39 +83,16 @@ public class DataRepository {
         .all()
         .from("data")
         .where(eq("smartphone_id",smartphoneId))
-        .orderBy(desc("event_time"))
-        .setFetchSize(FETCH_SIZE)
-        .setPagingState(getPagingState(pagingState));
+        .orderBy(desc("event_time"));
     //US07: trier par date
     //US12: paginer les résultats
 
     return getCollectionFromResultSet(session.execute(select));
   }
 
-  private PagingState getPagingState(String pagingState) {
-    PagingState ps;
-    if(pagingState == null){
-      ps = null;
-    } else {
-      ps = PagingState.fromString(pagingState);
-    }
-    return ps;
-  }
-
   private ResultPage<Data> getCollectionFromResultSet(ResultSet results) {
-    int nbrResult = results.getAvailableWithoutFetching();
-    List<Data> output = new ArrayList<>();
-    for (int i = 0; i < nbrResult; i++) {
-      Row row = results.one();
-      output.add(rowToData(row));
-    }
-
-    PagingState pagingState = results.getExecutionInfo().getPagingState();
-    if(pagingState != null){
-      return new ResultPage<>(output, pagingState.toString());
-    } else {
-      return new ResultPage<>(output, null);
-    }
+    //US12: paginer les résultats
+    return null;
   }
 
   private Data rowToData(Row row){
@@ -141,9 +110,7 @@ public class DataRepository {
     //US06 : recherche avec date début
     //US12: paginer les résultats
     Statement statement = selectDataStartDateStmt
-        .bind(smartphoneId, Date.from(startDate))
-        .setFetchSize(FETCH_SIZE)
-        .setPagingState(getPagingState(pagingState));
+        .bind(smartphoneId, Date.from(startDate));
 
     return getCollectionFromResultSet(session.execute(statement));
   }
@@ -153,9 +120,7 @@ public class DataRepository {
     //US06 : recherche avec date de fin
     //US12: paginer les résultats
     Statement statement = selectDataEndDateStmt
-        .bind(smartphoneId, Date.from(endDate))
-        .setFetchSize(FETCH_SIZE)
-        .setPagingState(getPagingState(pagingState));
+        .bind(smartphoneId, Date.from(endDate));
 
     return getCollectionFromResultSet(session.execute(statement));
   }
@@ -165,9 +130,7 @@ public class DataRepository {
     //US06 : recherche avec date début + dateFin
     //US12: paginer les résultats
     Statement statement = selectDataStartEndDateStmt
-        .bind(smartphoneId, Date.from(startDate), Date.from(endDate))
-        .setFetchSize(FETCH_SIZE)
-        .setPagingState(getPagingState(pagingState));
+        .bind(smartphoneId, Date.from(startDate), Date.from(endDate));
 
     return getCollectionFromResultSet(session.execute(statement));
   }

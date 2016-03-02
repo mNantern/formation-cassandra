@@ -1,19 +1,14 @@
 package fr.xebia.training.repository;
 
-import com.datastax.driver.core.PagingState;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
-import com.datastax.driver.mapping.Result;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -86,11 +81,6 @@ public class SmartphonesRepository {
     // US04: mise à jour d'un smartphone
     mapper.save(smartphone);
     //US15: insertion dans la table de recherche par constructor
-    session.execute(saveByConstructorStmt.bind(smartphone.getId(),
-                                               smartphone.getName(),
-                                               smartphone.getConstructor(),
-                                               smartphone.getModel(),
-                                               smartphone.getOwner()));
   }
 
   public Smartphone create(Smartphone smartphone) {
@@ -101,51 +91,16 @@ public class SmartphonesRepository {
                                               smartphone.getModel(),
                                               smartphone.getOwner()));
     //US15: insertion dans la table de recherche par constructor
-    session.execute(saveByConstructorStmt.bind(smartphone.getId(),
-                                               smartphone.getName(),
-                                               smartphone.getConstructor(),
-                                               smartphone.getModel(),
-                                               smartphone.getOwner()));
     return smartphone;
   }
 
   public ResultPage<Smartphone> readAll(String pagingState) {
     //US14: lister de manière paginée l'ensemble des smartphones
-    Statement statement = readAllSmartphoneStmt
-        .bind()
-        .setFetchSize(FETCH_SIZE);
-
-    if( pagingState != null){
-      statement.setPagingState(PagingState.fromString(pagingState));
-    }
-
-    ResultSet results = session.execute(statement);
-    int nbrResult = results.getAvailableWithoutFetching();
-    List<Smartphone> output = new ArrayList<>();
-    for (int i = 0; i < nbrResult; i++) {
-      Smartphone smartphone = mapper.map(results).one();
-      //US16: ajout de compteurs
-      Row counter = session.execute(readCounterStmt.bind(smartphone.getId())).one();
-      if(counter != null) {
-        smartphone.setDataCount(counter.getLong("data"));
-      }
-      output.add(smartphone);
-    }
-
-    PagingState nextPagingState = results.getExecutionInfo().getPagingState();
-    if(nextPagingState != null){
-      return new ResultPage<>(output, nextPagingState.toString());
-    } else {
-      return new ResultPage<>(output, null);
-    }
+    return null;
   }
 
   public List<Smartphone> readByConstructor(String constructor) {
     //US15 : Recherche par nom de constructeur
-    List<Smartphone> output = new ArrayList<>();
-    Statement statement = readByConstructorStmt.bind(constructor);
-    Result<Smartphone> results = mapper.map(session.execute(statement));
-    results.forEach(smartphone -> output.add(smartphone));
-    return output;
+    return null;
   }
 }

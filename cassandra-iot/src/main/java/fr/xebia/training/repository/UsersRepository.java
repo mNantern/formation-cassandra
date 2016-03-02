@@ -138,8 +138,6 @@ public class UsersRepository {
   public void addSmartphone(String owner, UUID smartphoneId, String smartphoneName) {
     //US09 : ajout d'un smartphone à l'utilisateur
     //US11 : ajout du nom du smartphone en plus de l'id
-    Map<UUID,String> toAdd = new HashMap<>();
-    toAdd.put(smartphoneId, smartphoneName);
-    session.execute(addSmartphoneStmt.bind(toAdd, owner));
+    session.execute(addSmartphoneStmt.bind(null, owner));
   }
 }
