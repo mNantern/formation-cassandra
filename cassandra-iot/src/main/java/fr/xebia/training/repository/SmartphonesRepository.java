@@ -34,6 +34,8 @@ public class SmartphonesRepository {
   public static final String
       READ_SMARTPHONE_COUNTER =
       "SELECT data FROM number_data_by_smartphones WHERE smartphone_id = ?;";
+  private static final String INSERT_SMARTPHONE =
+      "INSERT INTO smartphones (id, name, constructor, model, owner) VALUES (?, ?, ?, ?, ?)";
   private Session session;
 
   private Mapper<Smartphone> mapper;
@@ -43,6 +45,7 @@ public class SmartphonesRepository {
   private PreparedStatement readByConstructorStmt;
   private PreparedStatement saveByConstructorStmt;
   private PreparedStatement readCounterStmt;
+  private PreparedStatement insertSmartphoneStmt;
 
   @Autowired
   public SmartphonesRepository(Session session) {
@@ -57,6 +60,7 @@ public class SmartphonesRepository {
     readByConstructorStmt = session.prepare(SELECT_BY_CONSTRUCTOR);
     saveByConstructorStmt = session.prepare(INSERT_SMARTPHONES_BY_CONSTRUCTOR);
     readCounterStmt = session.prepare(READ_SMARTPHONE_COUNTER);
+    insertSmartphoneStmt = session.prepare(INSERT_SMARTPHONE);
   }
 
   public SmartphonesRepository(Session session, Mapper<Smartphone> mapper) {
@@ -91,7 +95,11 @@ public class SmartphonesRepository {
 
   public Smartphone create(Smartphone smartphone) {
     // US04: insertion d'un smartphone
-    mapper.save(smartphone);
+    session.execute(insertSmartphoneStmt.bind(smartphone.getId(),
+                                              smartphone.getName(),
+                                              smartphone.getConstructor(),
+                                              smartphone.getModel(),
+                                              smartphone.getOwner()));
     //US15: insertion dans la table de recherche par constructor
     session.execute(saveByConstructorStmt.bind(smartphone.getId(),
                                                smartphone.getName(),

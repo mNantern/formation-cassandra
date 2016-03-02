@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import fr.xebia.training.domain.model.Address;
@@ -36,6 +37,29 @@ public class ResourcesBuilder {
 
     input.add(data1);
     input.add(data2);
+
+    return input;
+  }
+
+  public static List<Data> createListData(UUID smartphoneId, int listSize) {
+    List<Data> input = new ArrayList<>();
+    Random random = new Random();
+    Instant startDate = Instant.parse("2016-02-04T12:00:00.000Z");
+
+    for (int i = 0; i < listSize; i++) {
+      startDate = startDate.plusSeconds(60);
+      String value = String.valueOf(random.nextInt(100));
+
+      Data data = new Data.Builder()
+          .id(UUID.randomUUID())
+          .eventTime(startDate)
+          .smartphoneId(smartphoneId)
+          .type(Type.BRIGHTNESS)
+          .value(value)
+          .build();
+
+      input.add(data);
+    }
 
     return input;
   }
@@ -74,6 +98,27 @@ public class ResourcesBuilder {
     smartphone.setModel("GALAXY S6");
     smartphone.setOwner("jdoe@gmail.com");
     return smartphone;
+  }
+
+  public static List<Smartphone> createSmartphone(int listSize) {
+    List<Smartphone> smartphones = new ArrayList<>();
+    String name = "MySmartphone";
+    String constructor = "SAMSUNG";
+    String model = "GALAXY S6";
+    String owner = "jdoe@gmail.com";
+
+    for (int i = 0; i < listSize; i++) {
+      Smartphone smartphone = new Smartphone();
+      smartphone.setId(UUID.randomUUID());
+      smartphone.setName(name + i);
+      smartphone.setConstructor(constructor);
+      smartphone.setModel(model);
+      smartphone.setOwner(owner);
+
+      smartphones.add(smartphone);
+    }
+
+    return smartphones;
   }
 
 }

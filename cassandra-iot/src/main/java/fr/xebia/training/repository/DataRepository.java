@@ -78,7 +78,7 @@ public class DataRepository {
                                           Date.from(data.getEventTime()),
                                           data.getType().toString(),
                                           data.getValue()));
-      //US15 : compter le nombre de données par smartphone
+      //US16 : compter le nombre de données par smartphone
       session.execute(updateCounterStmt.bind(data.getSmartphoneId()));
     });
   }
