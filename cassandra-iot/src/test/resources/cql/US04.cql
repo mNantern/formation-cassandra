@@ -1,4 +1,4 @@
--- US03 : créer la table permettant de gérer les smartphones
+-- US04 : créer la table permettant de gérer les smartphones
 
 CREATE TABLE IF NOT EXISTS smartphones (
    id uuid PRIMARY KEY,
