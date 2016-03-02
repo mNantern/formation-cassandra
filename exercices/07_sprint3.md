@@ -44,6 +44,15 @@ Pour réaliser cet écran il faut renvoyer de manière paginée les données ass
 
 Nous voulons pouvoir filtrer notre liste de résultat en fonction du nom constructeur.
 
-### US16 : Aficher le nombre de données par smartphone
+### US16 : Afficher le nombre de données par smartphone
 
 En utilisant une table `number_data_by_smartphones` avec une donnée de type `COUNTER` renvoyez dans notre service développé lors de l'US14 le nombre de données par smartphone.
+
+
+### Conclusion
+
+Vérifier que tous les tests passent.
+
+Bravo !
+
+Un petit poney pour te féliciter: :horse:
