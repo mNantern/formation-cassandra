@@ -20,15 +20,7 @@ import fr.xebia.training.domain.model.Smartphone;
 public class SmartphonesRepository {
 
   public static final String DELETE_SMARTPHONE = "DELETE FROM smartphones WHERE id=? IF owner=?;";
-  public static final String SELECT_ALL = "SELECT * FROM smartphones;";
   private static final int FETCH_SIZE = 20;
-  public static final String SELECT_BY_CONSTRUCTOR =
-      "SELECT * FROM smartphones_by_constructor WHERE constructor = ?;";
-  public static final String INSERT_SMARTPHONES_BY_CONSTRUCTOR =
-      "INSERT INTO smartphones_by_constructor (id, name, constructor, model, owner) VALUES (?, ?, ?, ?, ?)";
-  public static final String
-      READ_SMARTPHONE_COUNTER =
-      "SELECT data FROM number_data_by_smartphones WHERE smartphone_id = ?;";
   private static final String INSERT_SMARTPHONE =
       "INSERT INTO smartphones (id, name, constructor, model, owner) VALUES (?, ?, ?, ?, ?)";
   private Session session;
@@ -36,10 +28,6 @@ public class SmartphonesRepository {
   private Mapper<Smartphone> mapper;
 
   private PreparedStatement deleteSmartphoneStmt;
-  private PreparedStatement readAllSmartphoneStmt;
-  private PreparedStatement readByConstructorStmt;
-  private PreparedStatement saveByConstructorStmt;
-  private PreparedStatement readCounterStmt;
   private PreparedStatement insertSmartphoneStmt;
 
   @Autowired
@@ -51,10 +39,6 @@ public class SmartphonesRepository {
 
   private void prepareStatements() {
     deleteSmartphoneStmt = session.prepare(DELETE_SMARTPHONE);
-    readAllSmartphoneStmt = session.prepare(SELECT_ALL);
-    readByConstructorStmt = session.prepare(SELECT_BY_CONSTRUCTOR);
-    saveByConstructorStmt = session.prepare(INSERT_SMARTPHONES_BY_CONSTRUCTOR);
-    readCounterStmt = session.prepare(READ_SMARTPHONE_COUNTER);
     insertSmartphoneStmt = session.prepare(INSERT_SMARTPHONE);
   }
 
