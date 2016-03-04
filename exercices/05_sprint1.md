@@ -38,6 +38,10 @@ Il existe trois façons d'exécuter des requêtes dans Cassandra avec le driver:
 
 :information_source:  pour le POST nous allons utiliser une PreparedStatement.
 
+Une fois le service développé, le tester avec l'application mobile et vérifier que les données sont bien mises en place dans Cassandra.
+
+:warning: le téléphone doit être sur le même réseau wifi que l'ordinateur.
+
 ### US02 : Lecture des données
 
 Afin de créer la page exposée ci-dessus il faut pouvoir renvoyer la liste des données associées à un smartphoneId.
